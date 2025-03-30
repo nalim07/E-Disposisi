@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('incoming_mails', function (Blueprint $table) {
             $table->id();
-            $table->string('reference_number');
-            $table->string('sender');
-            $table->string('subject');
-            $table->date('received_date');
-            $table->string('status');
-            $table->foreignId('user_id')->constrained();
+            $table->string('mail_number'); // nomor_surat
+            $table->string('sender'); // pengirim
+            $table->string('subject'); // perihal
+            $table->date('mail_date'); // tanggal_surat
+            $table->date('received_date'); // tanggal_terima
+            $table->string('file_path');
+            $table->enum('status', ['draft', 'sent'])->default('draft');
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
     }

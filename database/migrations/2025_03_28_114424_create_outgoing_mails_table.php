@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('outgoing_mails', function (Blueprint $table) {
             $table->id();
-            $table->string('reference_number');
-            $table->string('recipient');
-            $table->string('subject');
-            $table->date('sent_date');
-            $table->string('status');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('incoming_mail_id')->constrained('incoming_mails');
+            $table->foreignId('recipient_id')->constrained('users');
+            $table->enum('status', ['followed up', 'archived'])->default('followed up');
             $table->timestamps();
         });
     }

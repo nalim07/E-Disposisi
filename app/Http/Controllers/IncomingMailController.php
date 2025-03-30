@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IncomingMails;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Models\IncomingMails;
 
 class IncomingMailController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        return IncomingMails::with('user')->get();
+        $incomingMails = IncomingMails::with('user')->get();
+        // $incomingMails = IncomingMails::latest()->paginate(10);
+        return view('incoming-mails.index', compact('incomingMails'));
     }
 
     public function store(Request $request)

@@ -47,18 +47,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function incomingMails()
+    public function employee()
     {
-        return $this->hasMany(IncomingMails::class);
-    }
-
-    public function outgoingMails()
-    {
-        return $this->hasMany(OutgoingMails::class);
-    }
-
-    public function dispositions()
-    {
-        return $this->hasMany(Disposition::class, 'employee_id');
+        return $this->belongsTo(Employee::class);
     }
 }

@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('dispositions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('incoming_mail_id')->constrained();
-            $table->foreignId('employee_id')->constrained();
-            $table->string('to');
-            $table->date('due_date');
-            $table->string('content');
-            $table->string('note')->nullable();
+            $table->foreignId('incoming_mail_id')->constrained('incoming_mails');
+            $table->foreignId('recipient_id')->constrained('users'); // previously tujuan_id
+            $table->text('content'); // isi
+            $table->date('deadline'); // batas_waktu
+            $table->text('notes')->nullable(); // catatan
+            $table->string('priority'); // sifat
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
     }

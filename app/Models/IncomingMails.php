@@ -18,13 +18,13 @@ class IncomingMails extends Model
         'user_id'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function dispositions()
     {
         return $this->hasMany(Disposition::class);
+    }
+
+    public function outgoingMails()
+    {
+        return $this->hasMany(OutgoingMails::class);
     }
 }
