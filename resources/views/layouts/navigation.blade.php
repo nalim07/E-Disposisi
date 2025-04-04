@@ -14,42 +14,57 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <!-- Beranda - Tampil untuk semua role -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Beranda') }}
                     </x-nav-link>
-                    @if (auth()->user()->role === 'admin')
-                        <!-- Dropdown untuk Admin -->
+
+                    @role('admin')
+                        <!-- Menu Admin -->
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open"
-                                class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none {{ request()->routeIs(['surat-masuk', 'surat-keluar']) ? 'border-indigo-400 text-gray-900 focus:border-indigo-700' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300' }}">
-                                {{ __('Surat') }}
+                                class="inline-flex items-center px-1 mt-6 pb-5 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none {{ request()->routeIs(['surat-masuk', 'surat-keluar']) ? 'border-white text-white focus:border-grey-200' : 'border-transparent text-gray-200 hover:text-white hover:border-gray-300 focus:text-gray-200 focus:border-gray-300' }}">
+                                {{ __('Transaksi Surat') }}
                             </button>
 
                             <!-- Dropdown Content -->
                             <div x-show="open" @click.away="open = false"
                                 class="absolute z-50 mt-2 w-48 rounded-md shadow-lg origin-top-left">
-                                <div class="rounded-md ring-1 ring-black ring-opacity-5 bg-white">
-                                    <x-nav-link :href="route('surat-masuk')" :active="request()->routeIs('surat-masuk')" class="block px-4 py-2 text-sm">
-                                        {{ __('Surat Masuk') }}
-                                    </x-nav-link>
-                                    <x-nav-link :href="route('surat-keluar')" :active="request()->routeIs('surat-keluar')" class="block px-4 py-2 text-sm">
-                                        {{ __('Surat Keluar') }}
-                                    </x-nav-link>
+                                <div class="rounded-md ring-1 ring-black ring-opacity-5 bg-white py-2">
+                                    @can('view_surat-masuk')
+                                        <x-dropdown-link :href="route('surat-masuk.index')" :active="request()->routeIs('surat-masuk.index')" class="block px-4 py-2 text-sm text">
+                                            {{ __('Surat Masuk') }}
+                                        </x-dropdown-link>
+                                    @endcan
+
+                                    @can('view_surat-keluar')
+                                        <x-dropdown-link :href="route('surat-keluar')" :active="request()->routeIs('surat-keluar')" class="block px-4 py-2 text-sm">
+                                            {{ __('Surat Keluar') }}
+                                        </x-dropdown-link>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
+
+                        @can('view_arsip')
+                            <x-nav-link :href="route('arsip')" :active="request()->routeIs('arsip')">
+                                {{ __('Arsip') }}
+                            </x-nav-link>
+                        @endcan
                     @else
-                        <!-- Tampilan reguler untuk Pimpinan & Pegawai -->
-                        <x-nav-link :href="route('surat-masuk')" :active="request()->routeIs('surat-masuk')">
-                            {{ __('Surat Masuk') }}
-                        </x-nav-link>
-                    @endif
-                    <x-nav-link :href="route('disposisi')" :active="request()->routeIs('disposisi')">
-                        {{ __('Disposisi') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('arsip')" :active="request()->routeIs('arsip')">
-                        {{ __('Arsip') }}
-                    </x-nav-link>
+                        <!-- Menu untuk Pimpinan & Pegawai -->
+                        @can('view_surat-masuk')
+                            <x-nav-link :href="route('surat-masuk')" :active="request()->routeIs('surat-masuk')">
+                                {{ __('Surat Masuk') }}
+                            </x-nav-link>
+                        @endcan
+
+                        @can('view_disposisi')
+                            <x-nav-link :href="route('disposisi')" :active="request()->routeIs('disposisi')">
+                                {{ __('Disposisi') }}
+                            </x-nav-link>
+                        @endcan
+                    @endrole
                 </div>
             </div>
 

@@ -8,10 +8,8 @@
             </svg>
             <h1 class="mr-4 text-3xl font-bold">Surat Masuk</h1>
 
-            <a href=""
-                class="inline-flex items-center text-white text-xl font-semibold gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 30 29"
-                    fill="none">
+            <a href="" class="inline-flex items-center text-white text-xl font-semibold gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 30 29" fill="none">
                     <path
                         d="M15 1.8125C11.5321 1.85318 8.2181 3.20295 5.76575 5.57356C3.3134 7.94417 1.91708 11.1477 1.875 14.5C1.91708 17.8523 3.3134 21.0558 5.76575 23.4264C8.2181 25.7971 11.5321 27.1468 15 27.1875C18.4679 27.1468 21.7819 25.7971 24.2343 23.4264C26.6866 21.0558 28.0829 17.8523 28.125 14.5C28.0829 11.1477 26.6866 7.94417 24.2343 5.57356C21.7819 3.20295 18.4679 1.85318 15 1.8125ZM22.5 15.4062H15.9375V21.75H14.0625V15.4062H7.5V13.5938H14.0625V7.25H15.9375V13.5938H22.5V15.4062Z"
                         fill="#F5F5F5" />
@@ -38,10 +36,6 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tanggal Surat
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Pengirim
                             </th>
                             <th scope="col"
@@ -50,42 +44,55 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tanggal Terima
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Aksi
                             </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                <a href=""
-                                    class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-600">
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                Tidak ada data
-                            </td>
-                        </tr>
-
+                        @foreach ($incomingMails as $incomingMail)
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $loop->iteration }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $incomingMail->mail_number }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $incomingMail->sender }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $incomingMail->subject }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $incomingMail->date }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ $incomingMail->status }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <a href="{{ route('surat-masuk.show', $incomingMail->id) }}"
+                                        class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-sm hover:bg-blue-600">
+                                        Lihat
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        {{-- Jika tidak ada data --}}
+                        @if ($incomingMails->isEmpty())
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    Tidak ada data
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

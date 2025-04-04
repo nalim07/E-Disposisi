@@ -10,23 +10,46 @@ class IncomingMailController extends Controller
 {
     public function index(): View
     {
-        $incomingMails = IncomingMails::with('user')->get();
-        // $incomingMails = IncomingMails::latest()->paginate(10);
+        // $incomingMails = IncomingMails::with('user')->get();
+        $incomingMails = IncomingMails::latest()->get();
         return view('incoming-mails.index', compact('incomingMails'));
     }
 
+    public function create(): View
+    {
+        return view('incoming-mails.create');
+    }
+
+    // IncomingMailController.php
     public function store(Request $request)
     {
+        // Validasi
         $validated = $request->validate([
-            'reference_number' => 'required|unique:incoming_mails',
-            'sender' => 'required',
-            'subject' => 'required',
-            'received_date' => 'required|date',
-            'status' => 'required',
-            'user_id' => 'required|exists:users,id'
+            'mail_number' => 'required|string|max:255',
+            'sender' => 'required|string|max:255',
+            'subject' => 'required|string',
+            'mail_date' => 'required|date',
+            'received_date' => 'required|date|after_or_equal:mail_date',
+            'file_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'status' => 'required|in:draft,sent',
+            'created_by' => 'required|exists:users,id'
         ]);
 
-        return IncomingMails::create($validated);
+        try {
+            // Handle file upload
+            if ($request->hasFile('file_path')) {
+                $path = $request->file('file_path')->store('surat-masuk', 'public');
+                $validated['file_path'] = $path;
+            }
+
+            IncomingMails::create($validated);
+
+            return redirect()->route('surat-masuk.index')
+                ->with('success', 'Data berhasil disimpan!');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        }
     }
 
     public function show(IncomingMails $incomingMail)

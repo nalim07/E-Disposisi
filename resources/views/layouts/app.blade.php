@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        {{-- logo --}}
+        <link rel="icon" href="{{ asset('images/logo.ico') }}" type="image/x-icon">
+
         <title>{{ config('app.name', 'e-disposisi') }}</title>
 
         <!-- Fonts -->
@@ -35,8 +38,8 @@
                     </div>
                 </div>
             </main>
-
-            @include('layouts.footer')
         </div>
+
+        @include('layouts.footer')
     </body>
 </html>

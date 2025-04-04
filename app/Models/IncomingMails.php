@@ -10,12 +10,14 @@ class IncomingMails extends Model
     use HasFactory;
 
     protected $fillable = [
-        'reference_number',
+        'mail_number',
         'sender',
         'subject',
+        'mail_date',
         'received_date',
+        'file_path',
         'status',
-        'user_id'
+        'created_by',
     ];
 
     public function dispositions()
@@ -25,6 +27,6 @@ class IncomingMails extends Model
 
     public function outgoingMails()
     {
-        return $this->hasMany(OutgoingMails::class);
+        return $this->hasMany(OutgoingMails ::class);
     }
 }

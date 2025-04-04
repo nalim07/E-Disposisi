@@ -5,6 +5,7 @@
         </h2>
     </x-slot> --}}
 
+    {{-- @dd(Auth::user()) --}}
 
     <div class="flex bg-primary overflow-hidden shadow-sm justify-start">
         <div class="py-10 pl-14">
@@ -20,7 +21,7 @@
     </div>
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6">
         <div class="p-6 bg-white border-b border-gray-200">
-            <h1 class="text-2xl font-bold">Selamat datang {{ Auth::user()->username }}</h1>
+            <h1 class="text-2xl font-bold">Selamat datang {{ Auth::user()->employee->fullname }}</h1>
         </div>
     </div>
     {{-- Card dinamis Surat masuk, Surat Keluar, Arsip --}}
@@ -36,7 +37,7 @@
                 <h2 class="text-xl font-semibold">Surat Masuk</h2>
             </div>
             <p class="mt-2">Jumlah: 5</p>
-            <a href="{{ route('surat-masuk') }}" class="mt-4 inline-block hover:underline">Lihat
+            <a href="{{ route('surat-masuk.index') }}" class="mt-4 inline-block hover:underline">Lihat
                 Detail</a>
         </div>
         <div class="bg-[#FD7E14] p-6 rounded-lg shadow-md">
