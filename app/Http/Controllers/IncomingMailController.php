@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
@@ -70,6 +71,26 @@ class IncomingMailController extends Controller
 
         $incomingMail->update($validated);
         return $incomingMail;
+    }
+
+    public function send(IncomingMails $incomingMail)
+    {
+        // Pastikan surat belum dikirim
+        if ($incomingMail->status === 'Belum diteruskan') {
+            // Dapatkan role pimpinan (sesuaikan query dengan sistem Anda)
+            $pimpinan = User::where('role', 'pimpinan')->first();
+
+            // Simpan ke outgoing_mails
+            // OutgoingMails::create([
+            //     'incoming_mail_id' => $incomingMail->id,
+            //     'recipient_id' => $pimpinan->id
+            // ]);
+
+            // Update status surat masuk
+            $incomingMail->update(['status' => 'Sudah Ditindaklanjuti']);
+        }
+
+        return redirect()->route('incoming-mails.index');
     }
 
     public function destroy(IncomingMails $incomingMail)

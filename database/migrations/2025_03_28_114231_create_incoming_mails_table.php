@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('mail_date'); // tanggal_surat
             $table->date('received_date'); // tanggal_terima
             $table->string('file_path');
-            $table->enum('status', ['draft', 'sent'])->default('draft');
+            $table->string('status')->default('Belum diteruskan'); // status
             $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });

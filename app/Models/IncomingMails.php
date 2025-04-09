@@ -20,6 +20,10 @@ class IncomingMails extends Model
         'created_by',
     ];
 
+    protected $attributes = [
+        'status' => 'Belum diteruskan'
+    ];
+
     public function dispositions()
     {
         return $this->hasMany(Disposition::class);

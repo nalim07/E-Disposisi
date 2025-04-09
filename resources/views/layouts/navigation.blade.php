@@ -54,7 +54,7 @@
                     @else
                         <!-- Menu untuk Pimpinan & Pegawai -->
                         @can('view_surat-masuk')
-                            <x-nav-link :href="route('surat-masuk')" :active="request()->routeIs('surat-masuk')">
+                            <x-nav-link :href="route('surat-masuk.index')" :active="request()->routeIs('surat-masuk')">
                                 {{ __('Surat Masuk') }}
                             </x-nav-link>
                         @endcan

@@ -1,6 +1,6 @@
 <footer class="bg-primary border-t border-gray-800 mt-auto">
     <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-        <div class="flex justify-center space-x-6 md:order-2">
+        {{-- <div class="flex justify-center space-x-6 md:order-2">
             <a href="#" class="text-gray-400 hover:text-gray-500">
                 <span class="sr-only">GitHub</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -12,6 +12,6 @@
         </div>
         <div class="mt-8 md:mt-0 md:order-1">
             <p class="text-center text-xs leading-5 text-gray-500"> Last updated on {{ date('F j, Y') }}</p>
-        </div>
+        </div> --}}
     </div>
 </footer>

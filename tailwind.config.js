@@ -21,5 +21,12 @@ export default {
         },
     },
 
+    safelist: [
+        {
+            pattern: /bg-(blue|orange|green|red)-(500|600)/,
+            variants: ['hover'],
+        }
+    ],
+
     plugins: [forms],
 };
