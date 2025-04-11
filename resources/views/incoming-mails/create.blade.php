@@ -41,7 +41,7 @@
                     </div>
 
                     <!-- Status -->
-                    <div class="space-y-2">
+                    {{-- <div class="space-y-2">
                         <label for="status" class="block text-sm font-medium text-gray-700">Status *</label>
                         <select id="status" name="status"
                             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('status') border-red-500 @enderror"
@@ -53,7 +53,7 @@
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Kolom Kanan -->

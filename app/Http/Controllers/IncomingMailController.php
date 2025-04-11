@@ -32,9 +32,12 @@ class IncomingMailController extends Controller
             'mail_date' => 'required|date',
             'received_date' => 'required|date|after_or_equal:mail_date',
             'file_path' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'status' => 'required|in:draft,sent',
             'created_by' => 'required|exists:users,id'
         ]);
+
+        // Set default status
+        $validated['status'] = 'Belum diteruskan';
+        // $validated['created_by'] = auth()->user()->id;
 
         try {
             // Handle file upload
@@ -96,6 +99,9 @@ class IncomingMailController extends Controller
     public function destroy(IncomingMails $incomingMail)
     {
         $incomingMail->delete();
-        return response()->noContent();
+        
+        return redirect()->route('surat-masuk.index')
+            ->with('success', 'Data berhasil dihapus!');
+
     }
 }
