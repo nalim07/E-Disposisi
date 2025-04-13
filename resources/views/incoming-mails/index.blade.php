@@ -1,19 +1,39 @@
 <x-app-layout>
+    <x-slot name="title">Surat Masuk</x-slot>
     <!-- Header Section -->
     <div class="flex bg-primary shadow-sm">
-        <div class="py-7 px-6 flex items-center gap-3 text-white">
-            <!-- Logo SVG -->
-            <svg class="w-12 h-14" viewBox="0 0 48 55" fill="currentColor">
-                <path
-                    d="M8 45.8333C6.9 45.8333 5.95867 45.3849 5.176 44.4881C4.39333 43.5913 4.00133 42.5119 4 41.25V13.75C4 12.4896 4.392 11.411 5.176 10.5142C5.96 9.61737 6.90133 9.1682 8 9.16667H40C41.1 9.16667 42.042 9.61584 42.826 10.5142C43.61 11.4125 44.0013 12.4911 44 13.75V41.25C44 42.5104 43.6087 43.5898 42.826 44.4881C42.0433 45.3865 41.1013 45.8349 40 45.8333H8ZM24 29.7917L40 18.3333V13.75L24 25.2083L8 13.75V18.3333L24 29.7917Z" />
-            </svg>
+        <div class="py-7 px-6 flex items-center justify-between text-white w-full">
+            <!-- Judul dan Tombol Create -->
+            <div class="flex items-center gap-3">
+                <!-- Logo SVG -->
+                <svg class="w-12 h-14" viewBox="0 0 48 55" fill="currentColor">
+                    <path
+                        d="M8 45.8333C6.9 45.8333 5.95867 45.3849 5.176 44.4881C4.39333 43.5913 4.00133 42.5119 4 41.25V13.75C4 12.4896 4.392 11.411 5.176 10.5142C5.96 9.61737 6.90133 9.1682 8 9.16667H40C41.1 9.16667 42.042 9.61584 42.826 10.5142C43.61 11.4125 44.0013 12.4911 44 13.75V41.25C44 42.5104 43.6087 43.5898 42.826 44.4881C42.0433 45.3865 41.1013 45.8349 40 45.8333H8ZM24 29.7917L40 18.3333V13.75L24 25.2083L8 13.75V18.3333L24 29.7917Z" />
+                </svg>
 
-            <h1 class="text-3xl font-bold mr-4">Surat Masuk</h1>
+                <h1 class="text-3xl font-bold mr-4">Surat Masuk</h1>
 
-            <!-- Create Button -->
-            <x-action-button-create href="{{ route('surat-masuk.create') }}"
-                icon="M15 1.8125C11.5321 1.85318 8.2181 3.20295 5.76575 5.57356C3.3134 7.94417 1.91708 11.1477 1.875 14.5C1.91708 17.8523 3.3134 21.0558 5.76575 23.4264C8.2181 25.7971 11.5321 27.1468 15 27.1875C18.4679 27.1468 21.7819 25.7971 24.2343 23.4264C26.6866 21.0558 28.0829 17.8523 28.125 14.5C28.0829 11.1477 26.6866 7.94417 24.2343 5.57356C21.7819 3.20295 18.4679 1.85318 15 1.8125ZM22.5 15.4062H15.9375V21.75H14.0625V15.4062H7.5V13.5938H14.0625V7.25H15.9375V13.5938H22.5V15.4062Z"
-                label="Tambah Data" />
+                <!-- Create Button -->
+                <x-action-button-create href="{{ route('surat-masuk.create') }}"
+                    icon="M15 1.8125C11.5321 1.85318 8.2181 3.20295 5.76575 5.57356C3.3134 7.94417 1.91708 11.1477 1.875 14.5C1.91708 17.8523 3.3134 21.0558 5.76575 23.4264C8.2181 25.7971 11.5321 27.1468 15 27.1875C18.4679 27.1468 21.7819 25.7971 24.2343 23.4264C26.6866 21.0558 28.0829 17.8523 28.125 14.5C28.0829 11.1477 26.6866 7.94417 24.2343 5.57356C21.7819 3.20295 18.4679 1.85318 15 1.8125ZM22.5 15.4062H15.9375V21.75H14.0625V15.4062H7.5V13.5938H14.0625V7.25H15.9375V13.5938H22.5V15.4062Z"
+                    label="Tambah Data" />
+            </div>
+
+            <!-- Grup Kanan: Form Pencarian -->
+            <div class="flex items-center">
+                <form action="" method="GET" class="flex bg-[#ECE6F0] rounded-full px-4 py-2">
+                    <input type="search" name="q" id="q" placeholder="Ketik untuk mencari data"
+                        class="w-72 px-2 py-2 text-base text-gray-800 font-normal border-none bg-transparent focus:ring-0 focus:outline-none"
+                        value="{{ request('q') }}" />
+                    <button type="submit" class="pr-2 py-2 bg-transparent">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.25 4.5a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zM20.25 20.25l-4.5-4.5" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -37,11 +57,15 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse ($incomingMails as $incomingMail)
                             <tr>
-                                <x-table-cell class="whitespace-nowrap">{{ $loop->iteration }}</x-table-cell>
-                                <x-table-cell class="whitespace-nowrap">{{ $incomingMail->mail_number }}</x-table-cell>
-                                <x-table-cell class="whitespace-nowrap">{{ $incomingMail->sender }}</x-table-cell>
-                                <x-table-cell class="whitespace-nowrap">{{ $incomingMail->subject }}</x-table-cell>
-                                <x-table-cell class="whitespace-nowrap">
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $loop->iteration }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $incomingMail->mail_number }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $incomingMail->sender }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-left whitespace-nowrap">{{ $incomingMail->subject }}</x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
                                     {{ $incomingMail->received_date }}
                                 </x-table-cell>
                                 <x-table-cell>

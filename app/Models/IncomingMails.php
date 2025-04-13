@@ -16,6 +16,7 @@ class IncomingMails extends Model
         'mail_date',
         'received_date',
         'file_path',
+        'original_name',
         'status',
         'created_by',
     ];
@@ -31,6 +32,14 @@ class IncomingMails extends Model
 
     public function outgoingMails()
     {
-        return $this->hasMany(OutgoingMails ::class);
+        return $this->hasMany(OutgoingMails::class);
+    }
+
+    public function getStatusBadgeAttribute()
+    {
+        return [
+            'Belum diteruskan' => 'bg-yellow-200 text-yellow-800',
+            'Sudah Diteruskan' => 'bg-green-200 text-green-800',
+        ][$this->status] ?? 'bg-gray-200 text-gray-800';
     }
 }

@@ -40,10 +40,13 @@ class IncomingMailController extends Controller
         // $validated['created_by'] = auth()->user()->id;
 
         try {
-            // Handle file upload
             if ($request->hasFile('file_path')) {
-                $path = $request->file('file_path')->store('surat-masuk', 'public');
+                $file = $request->file('file_path');
+                $originalName = $file->getClientOriginalName();
+                $path = $file->store('surat-masuk', 'public');
+
                 $validated['file_path'] = $path;
+                $validated['original_name'] = $originalName; // simpan nama asli
             }
 
             IncomingMails::create($validated);
@@ -58,7 +61,7 @@ class IncomingMailController extends Controller
 
     public function show(IncomingMails $incomingMail)
     {
-        return $incomingMail->load('dispositions');
+        return view('incoming-mails.show', compact('incomingMail'));
     }
 
     public function update(Request $request, IncomingMails $incomingMail)
@@ -99,9 +102,8 @@ class IncomingMailController extends Controller
     public function destroy(IncomingMails $incomingMail)
     {
         $incomingMail->delete();
-        
+
         return redirect()->route('surat-masuk.index')
             ->with('success', 'Data berhasil dihapus!');
-
     }
 }

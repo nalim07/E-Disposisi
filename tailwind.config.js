@@ -22,6 +22,10 @@ export default {
     },
 
     safelist: [
+        'bg-yellow-200',
+        'text-yellow-800',
+        'bg-green-200',
+        'text-green-800',
         {
             pattern: /bg-(blue|orange|green|red)-(500|600)/,
             variants: ['hover'],

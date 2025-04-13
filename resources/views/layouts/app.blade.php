@@ -8,7 +8,7 @@
         {{-- logo --}}
         <link rel="icon" href="{{ asset('images/logo.ico') }}" type="image/x-icon">
 
-        <title>{{ config('app.name', 'e-disposisi') }}</title>
+        <title>{{ $title ?? config('app.name') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

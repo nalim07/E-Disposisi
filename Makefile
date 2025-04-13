@@ -7,7 +7,6 @@ route-clear:
 
 cache:
 		php artisan optimize:clear
-		php artisan icons:cache
 		php artisan icon:cache
 
 ## ONLY FOR DEVELOPMENT ##
