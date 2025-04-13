@@ -9,126 +9,111 @@
             </svg>
             <h1 class="text-3xl font-bold">Tambah Surat Masuk</h1>
         </div>
-
-        <!-- Form Container -->
-        <form method="POST" action="{{ route('surat-masuk.store') }}" enctype="multipart/form-data"
-            class="flex flex-col gap-8 p-6 bg-white">
-            @csrf
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Kolom Kiri -->
-                <div class="space-y-6">
-                    <!-- Nomor Surat -->
-                    <div class="space-y-2">
-                        <label for="mail_number" class="block text-sm font-medium text-gray-700">Nomor Surat *</label>
-                        <input type="text" id="mail_number" name="mail_number"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('mail_number') border-red-500 @enderror"
-                            value="{{ old('mail_number') }}" required>
-                        @error('mail_number')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Pengirim -->
-                    <div class="space-y-2">
-                        <label for="sender" class="block text-sm font-medium text-gray-700">Pengirim *</label>
-                        <input type="text" id="sender" name="sender"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('sender') border-red-500 @enderror"
-                            value="{{ old('sender') }}" required>
-                        @error('sender')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Status -->
-                    {{-- <div class="space-y-2">
-                        <label for="status" class="block text-sm font-medium text-gray-700">Status *</label>
-                        <select id="status" name="status"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('status') border-red-500 @enderror"
-                            required>
-                            <option value="draft" {{ old('status', 'draft') == 'draft' ? 'selected' : '' }}>Draft
-                            </option>
-                            <option value="sent" {{ old('status') == 'sent' ? 'selected' : '' }}>Terkirim</option>
-                        </select>
-                        @error('status')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
-                </div>
-
-                <!-- Kolom Kanan -->
-                <div class="space-y-6">
-                    <!-- Tanggal Surat -->
-                    <div class="space-y-2">
-                        <label for="mail_date" class="block text-sm font-medium text-gray-700">Tanggal Surat *</label>
-                        <input type="date" id="mail_date" name="mail_date"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('mail_date') border-red-500 @enderror"
-                            value="{{ old('mail_date') }}" required>
-                        @error('mail_date')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Tanggal Terima -->
-                    <div class="space-y-2">
-                        <label for="received_date" class="block text-sm font-medium text-gray-700">Tanggal Terima
-                            *</label>
-                        <input type="date" id="received_date" name="received_date"
-                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('received_date') border-red-500 @enderror"
-                            value="{{ old('received_date') }}" required>
-                        @error('received_date')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- File Upload -->
-                    <div class="space-y-2">
-                        <label for="file_path" class="block text-sm font-medium text-gray-700">Unggah File *</label>
-                        <div
-                            class="flex items-center gap-4 p-4 border rounded-lg @error('file_path') border-red-500 @enderror">
-                            <input type="file" id="file_path" name="file_path" class="hidden"
-                                accept=".pdf,.jpg,.jpeg,.png" required>
-                            <label for="file_path"
-                                class="px-4 py-2 text-white bg-blue-600 rounded-lg cursor-pointer hover:bg-blue-700">
-                                Pilih File
-                            </label>
-                            <span class="text-sm text-gray-500" id="file-name">
-                                {{ old('file_path') ?? 'Format: PDF, JPG, PNG (Maks. 2MB)' }}
-                            </span>
-                        </div>
-                        @error('file_path')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-            </div>
-
-            <!-- Perihal -->
-            <div class="space-y-2">
-                <label for="subject" class="block text-sm font-medium text-gray-700">Perihal *</label>
-                <textarea id="subject" name="subject" rows="3"
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('subject') border-red-500 @enderror"
-                    required>{{ old('subject') }}</textarea>
-                @error('subject')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Created By (Hidden Input) -->
-            <input type="hidden" name="created_by" value="{{ auth()->id() }}">
-
-            <!-- Action Buttons -->
-            <div class="flex gap-4 mt-8">
-                <button type="submit" class="px-6 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">
-                    Simpan
-                </button>
-                <button type="button" onclick="window.history.back()"
-                    class="px-6 py-2 text-gray-700 bg-gray-200 rounded-lg shadow hover:bg-gray-300">
-                    Batal
-                </button>
-            </div>
-        </form>
     </div>
+
+    <!-- Form Container -->
+    <form method="POST" action="{{ route('surat-masuk.store') }}" enctype="multipart/form-data"
+        class="flex flex-col mt-4 gap-8 p-6 bg-white">
+        @csrf
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Kolom Kiri -->
+            <div class="space-y-6">
+                <!-- Nomor Surat -->
+                <div class="space-y-2">
+                    <label for="mail_number" class="block text-sm font-medium text-gray-700">Nomor Surat *</label>
+                    <input type="text" id="mail_number" name="mail_number"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('mail_number') border-red-500 @enderror"
+                        value="{{ old('mail_number') }}" required>
+                    @error('mail_number')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Pengirim -->
+                <div class="space-y-2">
+                    <label for="sender" class="block text-sm font-medium text-gray-700">Pengirim *</label>
+                    <input type="text" id="sender" name="sender"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('sender') border-red-500 @enderror"
+                        value="{{ old('sender') }}" required>
+                    @error('sender')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Perihal -->
+                <div class="space-y-2">
+                    <label for="subject" class="block text-sm font-medium text-gray-700">Perihal *</label>
+                    <textarea id="subject" name="subject" rows="3"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('subject') border-red-500 @enderror"
+                        required>{{ old('subject') }}</textarea>
+                    @error('subject')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <!-- Kolom Kanan -->
+            <div class="space-y-6">
+                <!-- Tanggal Surat -->
+                <div class="space-y-2">
+                    <label for="mail_date" class="block text-sm font-medium text-gray-700">Tanggal Surat *</label>
+                    <input type="date" id="mail_date" name="mail_date"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('mail_date') border-red-500 @enderror"
+                        value="{{ old('mail_date') }}" required>
+                    @error('mail_date')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Tanggal Terima -->
+                <div class="space-y-2">
+                    <label for="received_date" class="block text-sm font-medium text-gray-700">Tanggal Terima
+                        *</label>
+                    <input type="date" id="received_date" name="received_date"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('received_date') border-red-500 @enderror"
+                        value="{{ old('received_date') }}" required>
+                    @error('received_date')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- File Upload -->
+                <div class="space-y-2">
+                    <label for="file_path" class="block text-sm font-medium text-gray-700">Unggah File *</label>
+                    <div
+                        class="flex items-center gap-4 p-4 border rounded-lg @error('file_path') border-red-500 @enderror">
+                        <input type="file" id="file_path" name="file_path" class="hidden"
+                            accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="file_path"
+                            class="px-4 py-2 text-white bg-blue-600 rounded-lg cursor-pointer hover:bg-blue-700">
+                            Pilih File
+                        </label>
+                        <span class="text-sm text-gray-500" id="file-name">
+                            {{ old('file_path') ?? 'Format: PDF, JPG, PNG (Maks. 2MB)' }}
+                        </span>
+                    </div>
+                    @error('file_path')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <!-- Created By (Hidden Input) -->
+        <input type="hidden" name="created_by" value="{{ auth()->id() }}">
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 mt-8">
+            <button type="submit" class="px-6 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">
+                Simpan
+            </button>
+            <button type="button" onclick="window.history.back()"
+                class="px-6 py-2 text-gray-700 bg-gray-200 rounded-lg shadow hover:bg-gray-300">
+                Batal
+            </button>
+        </div>
+    </form>
 </x-app-layout>
 
 <script>
