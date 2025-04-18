@@ -7,6 +7,105 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# Sistem E-Disposisi
+---
+## Panduan Instalasi dan Menjalankan Website
+
+📝 **Panduan ini untuk pemula!** Ikuti langkah-langkah berikut dengan hati-hati 🛠️
+
+---
+
+## 📋 Persyaratan Sistem
+Sebelum memulai, pastikan komputer Anda sudah terinstall:
+1. **PHP 8.2+** ([Download](https://www.php.net/downloads.php))
+2. **Node.js** (versi LTS disarankan) ([Download](https://nodejs.org))
+3. **Composer** ([Download](https://getcomposer.org))
+4. **Laragon 6** ([Download](https://github.com/leokhoa/laragon/releases))
+5. **Git** ([Download](https://git-scm.com/downloads))
+6. **Visual Studio Code** (atau editor lain) ([Download](https://code.visualstudio.com))
+
+---
+
+## � Cara Install
+
+### 1. Clone Repository
+```bash
+# Buka terminal di folder yang diinginkan (bisa klik kanan > Git Bash Here)
+git clone https://github.com/nalim07/E-Disposisi.git
+```
+
+### 2. Masuk ke Folder Project
+```bash
+cd .\E-Diposisi\
+```
+
+### 3. Install Dependencies
+```bash
+# Install PHP packages
+composer install
+
+# Install JavaScript packages
+npm i
+```
+
+### 4. Setup Environment
+```bash
+# Salin file environment
+copy .env.example .env  # Untuk Windows
+# atau
+cp .env.example .env    # Untuk Linux/Mac
+
+# Generate application key
+php artisan key:generate
+```
+### 5. Database Setup
+```bash
+# Jalankan migration + seeding
+php artisan migrate --seed
+```
+
+---
+
+## 🚀 Menjalankan Aplikasi
+### Cara 1: Menggunakan Terminal
+```bash
+# Buka DUA terminal terpisah
+
+# Terminal 1: Jalankan web server
+php artisan serve
+
+# Terminal 2: Jalankan Vite untuk frontend
+npm run dev
+```
+### Cara 2: Menggunakan Laragon
+- Buka Laragon
+- Start semua service (Apache, MySQL, dll)
+- Klik menu  > pilih www > pilih e-disposisi
+- Akses via http://e-diposisi.test
+
+---
+
+## 🌐 Akses Aplikasi
+Buka browser dan kunjungi:
+```bash
+http://localhost:8000
+```
+atau
+```bash
+http://e-diposisi.test (jika pakai Laragon)
+```
+
+---
+
+## 📞 Butuh Bantuan?
+Hubungi developer:
+📧 Email: alim.nur7799@gmail.com
+📸 Instagram: [@n_alim07](https://instagram.com/n_alim07)
+
+#### ✨ Selamat! Aplikasi sudah berjalan di komputer Anda! ✨
+
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
