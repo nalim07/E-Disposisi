@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('received_date'); // tanggal_terima
             $table->string('file_path');
             $table->string('original_name');
-            $table->string('status')->default('Belum diteruskan'); // status
+            $table->string('status')->default('Belum Diteruskan'); // status
             $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
