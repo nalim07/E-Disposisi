@@ -25,7 +25,7 @@
                 <div class="space-y-4">
                     <h1 class="text-3xl font-bold">Selamat Datang</h1>
                     <h1 class="text-3xl font-bold">E - Disposisi</h1>
-                    <img src="{{ asset('images/logo-angels-product.png') }}" alt="Logo"
+                    <img src="{{ asset('images/logo-smp.png') }}" alt="Logo"
                         class="w-48 mx-auto mt-6 transition-transform hover:scale-105">
                 </div>
             </div>

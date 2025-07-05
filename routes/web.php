@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncomingMailController;
 use App\Http\Controllers\OutgoingMailController;
 
@@ -11,7 +12,7 @@ Route::redirect('/', '/login');
 // Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Incoming Mail Resource
     Route::resource('surat-masuk', IncomingMailController::class)
@@ -25,6 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'update' => 'surat-masuk.update',
             'destroy' => 'surat-masuk.destroy'
         ]);
+
+    Route::patch('/surat-masuk/{incomingMail}/send', [IncomingMailController::class, 'send'])
+        ->name('surat-masuk.send');
 
     Route::resource('surat-keluar', OutgoingMailController::class)
         ->parameter('surat-keluar', 'outgoingMail')

@@ -6,13 +6,27 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
+use Illuminate\Support\Facades\Auth;
 
 class IncomingMailController extends Controller
 {
     public function index(): View
     {
-        // $incomingMails = IncomingMails::with('user')->get();
-        $incomingMails = IncomingMails::latest()->get();
+        $user = Auth::user();
+
+        if ($user->hasRole('admin')) {
+            // Admin melihat semua surat masuk
+            $incomingMails = IncomingMails::orderBy('received_date', 'desc')->get();
+        } elseif ($user->hasRole('pimpinan')) {
+            // Pimpinan hanya melihat yang sudah ditindaklanjuti
+            $incomingMails = IncomingMails::where('status', 'Sudah Ditindaklanjuti')
+                ->orderBy('received_date', 'desc')
+                ->get();
+        } else {
+            // Role lain tidak mendapat surat masuk
+            $incomingMails = collect();
+        }
+
         return view('incoming-mails.index', compact('incomingMails'));
     }
 
@@ -81,22 +95,11 @@ class IncomingMailController extends Controller
 
     public function send(IncomingMails $incomingMail)
     {
-        // Pastikan surat belum dikirim
         if ($incomingMail->status === 'Belum diteruskan') {
-            // Dapatkan role pimpinan (sesuaikan query dengan sistem Anda)
-            $pimpinan = User::where('role', 'pimpinan')->first();
-
-            // Simpan ke outgoing_mails
-            // OutgoingMails::create([
-            //     'incoming_mail_id' => $incomingMail->id,
-            //     'recipient_id' => $pimpinan->id
-            // ]);
-
-            // Update status surat masuk
             $incomingMail->update(['status' => 'Sudah Ditindaklanjuti']);
         }
 
-        return redirect()->route('incoming-mails.index');
+        return redirect()->route('surat-masuk.index');
     }
 
     public function destroy(IncomingMails $incomingMail)

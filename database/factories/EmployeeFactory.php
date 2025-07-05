@@ -18,7 +18,6 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         return [
-            'position_id' => Position::inRandomOrder()->first()->id,
             'employee_code' => 'E' . $this->faker->unique()->numerify('#####'),
             'fullname' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
