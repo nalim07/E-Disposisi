@@ -32,13 +32,13 @@
                                 class="absolute z-50 mt-2 w-48 rounded-md shadow-lg origin-top-left">
                                 <div class="rounded-md ring-1 ring-black ring-opacity-5 bg-white py-2">
                                     @can('view_surat-masuk')
-                                        <x-dropdown-link :href="route('surat-masuk.index')" :active="request()->routeIs('surat-masuk.index')" class="block px-4 py-2 text-sm text">
+                                        <x-dropdown-link :href="route('surat-masuk.index')" :active="request()->routeIs('surat-masuk.index')" class="block px-4 py-2 text-sm">
                                             {{ __('Surat Masuk') }}
                                         </x-dropdown-link>
                                     @endcan
 
                                     @can('view_surat-keluar')
-                                        <x-dropdown-link :href="route('surat-keluar')" :active="request()->routeIs('surat-keluar')" class="block px-4 py-2 text-sm">
+                                        <x-dropdown-link :href="route('surat-keluar.index')" :active="request()->routeIs('surat-keluar.index')" class="block px-4 py-2 text-sm">
                                             {{ __('Surat Keluar') }}
                                         </x-dropdown-link>
                                     @endcan

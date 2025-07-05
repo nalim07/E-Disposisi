@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IncomingMailController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OutgoingMailController;
 
 // Redirect root to login
 Route::redirect('/', '/login');
@@ -25,7 +26,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'destroy' => 'surat-masuk.destroy'
         ]);
 
-    Route::view('/surat-keluar', 'outgoing-mails')->name('surat-keluar');
+    Route::resource('surat-keluar', OutgoingMailController::class)
+        ->parameter('surat-keluar', 'outgoingMail')
+        ->names([
+            'index' => 'surat-keluar.index',
+            'create' => 'surat-keluar.create',
+            'store' => 'surat-keluar.store',
+            'show' => 'surat-keluar.show',
+            'edit' => 'surat-keluar.edit',
+            'update' => 'surat-keluar.update',
+            'destroy' => 'surat-keluar.destroy'
+        ]);
     Route::view('/disposisi', 'dispositions')->name('disposisi');
     Route::view('/arsip', 'archive')->name('arsip');
 });

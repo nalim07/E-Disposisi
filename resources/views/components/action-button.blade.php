@@ -1,11 +1,10 @@
 @props(['href', 'icon', 'label', 'color' => 'blue'])
 
-<a href="{{ $href }}"
+<a href="{{ $href }}" title="{{ $label }}"
     {{ $attributes->merge([
-        'class' => "inline-flex items-center p-2 text-white font-semibold rounded-full shadow-sm bg-{$color}-500 hover:bg-{$color}-600 gap-1",
+        'class' => "inline-flex items-center justify-center w-9 h-9 rounded-full bg-{$color}-500 hover:bg-{$color}-600 text-white",
     ]) }}>
-    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
         <path d="{{ $icon }}" />
     </svg>
-    {{ $label }}
 </a>
