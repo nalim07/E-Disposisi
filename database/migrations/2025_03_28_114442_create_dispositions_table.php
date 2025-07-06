@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('dispositions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('incoming_mail_id')->constrained('incoming_mails');
-            $table->foreignId('recipient_id')->constrained('users'); // previously tujuan_id
+            $table->foreignId('incoming_mail_id')->constrained('incoming_mails')->onDelete('cascade'); // previously surat_masuk_id
+            $table->foreignId('recipient_id')->constrained('users')->onDelete('cascade'); // previously tujuan_id
             $table->text('content'); // isi
             $table->date('deadline'); // batas_waktu
             $table->text('notes')->nullable(); // catatan
             $table->string('priority'); // sifat
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); // previously dibuat_oleh
             $table->timestamps();
         });
     }
