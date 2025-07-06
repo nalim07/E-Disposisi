@@ -2,57 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use id;
 use App\Models\User;
+use App\Models\Employee;
 use App\Models\Disposition;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
+use Illuminate\Support\Facades\Auth;
 
 class DispositionController extends Controller
 {
-    public function kirim(IncomingMails $incomingMail)
-    {
-        $pimpinan = User::role('pimpinan')->first();
-
-        if (!$pimpinan) {
-            return back()->with('error', 'User dengan role pimpinan belum tersedia.');
-        }
-
-        Disposition::create([
-            'incoming_mail_id' => $incomingMail->id,
-            'recipient_id' => $pimpinan->id,
-            'deadline' => now()->addDays(3),
-            'content' => 'Silakan ditindaklanjuti.',
-            'priority' => 'Biasa',
-            // 'created_by' => auth()->id(),
-        ]);
-
-        $incomingMail->update(['status' => 'Sudah diteruskan']);
-
-        return redirect()->route('surat-masuk.index')->with('success', 'Surat berhasil dikirim ke pimpinan.');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('disposisi.index', [
+            'dispositions' => Disposition::with(['incomingMail', 'recipient'])->get(),
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(IncomingMails $incomingMail)
     {
-        //
+        $employees = Employee::with('position')
+            ->get()
+            ->unique(fn($item) => $item->position->id); // atau $item->position_id
+
+
+        return view('disposisi.create', compact('incomingMail', 'employees'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'incoming_mail_id' => 'required|exists:incoming_mails,id',
+            'recipient_id' => 'required|exists:users,id',
+            'content' => 'required',
+            'deadline' => 'required|date',
+            'priority' => 'required|in:Penting,Biasa,Segera',
+            'notes' => 'nullable',
+        ]);
+
+        Disposition::create([
+            'incoming_mail_id' => $request->incoming_mail_id,
+            'recipient_id' => $request->recipient_id,
+            'content' => $request->content,
+            'deadline' => $request->deadline,
+            'priority' => $request->priority,
+            'notes' => $request->notes,
+            'created_by' => Auth::id(),
+        ]);
+
+        IncomingMails::where('id', $request->incoming_mail_id)->update([
+            'is_disposed' => true,
+        ]);
+
+        return redirect()->route('surat-masuk.index')->with('success', 'Disposisi berhasil dibuat.');
     }
 
     /**

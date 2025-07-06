@@ -60,7 +60,7 @@
                         @endcan
 
                         @can('view_disposisi')
-                            <x-nav-link :href="route('disposisi')" :active="request()->routeIs('disposisi')">
+                            <x-nav-link :href="route('disposisi.index')" :active="request()->routeIs('disposisi')">
                                 {{ __('Disposisi') }}
                             </x-nav-link>
                         @endcan

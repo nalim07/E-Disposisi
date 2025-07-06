@@ -12,11 +12,24 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $incomingMailCount = IncomingMails::count();
+        if (auth()->user()->hasRole('pimpinan')) {
+            // Khusus untuk pimpinan: hanya hitung surat yang sudah ditindaklanjuti
+            $incomingMailCount = IncomingMails::where('is_disposed', false)->where('status', 'Sudah Ditindaklanjuti')->count();
+        } else {
+            // Untuk admin: hitung semua surat masuk
+            $incomingMailCount = IncomingMails::count();
+        }
+
         $outgoingMailCount = OutgoingMails::count();
         $archiveCount = Archive::count();
-        // $dispositionCount = Disposition::count();
+        $dispositionCount = Disposition::count();
 
-        return view('dashboard', compact('incomingMailCount'));
+        return view('dashboard', compact(
+            'incomingMailCount',
+            'incomingMailCount',
+            'outgoingMailCount',
+            'archiveCount',
+            'dispositionCount'
+        ));
     }
 }

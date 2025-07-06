@@ -21,10 +21,11 @@
             <div class="space-y-6">
                 <!-- Nomor Surat -->
                 <div class="space-y-2">
-                    <label for="mail_number" class="block text-sm font-medium text-gray-700">Nomor Surat *</label>
+                    <label for="mail_number" class="block text-sm font-medium text-gray-700">Nomor Surat <span
+                            class="text-red-500">*</span></label>
                     <input type="text" id="mail_number" name="mail_number"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('mail_number') border-red-500 @enderror"
-                        value="{{ old('mail_number') }}" required>
+                        value="{{ old('mail_number') }}" required aria-required="true">
                     @error('mail_number')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -32,10 +33,11 @@
 
                 <!-- Pengirim -->
                 <div class="space-y-2">
-                    <label for="sender" class="block text-sm font-medium text-gray-700">Pengirim *</label>
+                    <label for="sender" class="block text-sm font-medium text-gray-700">Pengirim <span
+                            class="text-red-500">*</span></label>
                     <input type="text" id="sender" name="sender"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('sender') border-red-500 @enderror"
-                        value="{{ old('sender') }}" required>
+                        value="{{ old('sender') }}" required aria-required="true">
                     @error('sender')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -43,10 +45,11 @@
 
                 <!-- Perihal -->
                 <div class="space-y-2">
-                    <label for="subject" class="block text-sm font-medium text-gray-700">Perihal *</label>
+                    <label for="subject" class="block text-sm font-medium text-gray-700">Perihal <span
+                            class="text-red-500">*</span></label>
                     <textarea id="subject" name="subject" rows="3"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('subject') border-red-500 @enderror"
-                        required>{{ old('subject') }}</textarea>
+                        required aria-required="true">{{ old('subject') }}</textarea>
                     @error('subject')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -57,7 +60,8 @@
             <div class="space-y-6">
                 <!-- Tanggal Surat -->
                 <div class="space-y-2">
-                    <label for="mail_date" class="block text-sm font-medium text-gray-700">Tanggal Surat *</label>
+                    <label for="mail_date" class="block text-sm font-medium text-gray-700">Tanggal Surat <span
+                            class="text-red-500">*</span></label>
                     <input type="date" id="mail_date" name="mail_date"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('mail_date') border-red-500 @enderror"
                         value="{{ old('mail_date') }}" required>
@@ -69,10 +73,10 @@
                 <!-- Tanggal Terima -->
                 <div class="space-y-2">
                     <label for="received_date" class="block text-sm font-medium text-gray-700">Tanggal Terima
-                        *</label>
+                        <span class="text-red-500">*</span></label>
                     <input type="date" id="received_date" name="received_date"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('received_date') border-red-500 @enderror"
-                        value="{{ old('received_date') }}" required>
+                        value="{{ old('received_date') }}" required aria-required="true">
                     @error('received_date')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -80,11 +84,12 @@
 
                 <!-- File Upload -->
                 <div class="space-y-2">
-                    <label for="file_path" class="block text-sm font-medium text-gray-700">Unggah File *</label>
+                    <label for="file_path" class="block text-sm font-medium text-gray-700">Unggah File <span
+                            class="text-red-500">*</span></label>
                     <div
                         class="flex items-center gap-4 p-4 border rounded-lg @error('file_path') border-red-500 @enderror">
                         <input type="file" id="file_path" name="file_path" class="hidden"
-                            accept=".pdf,.jpg,.jpeg,.png" required>
+                            accept=".pdf,.jpg,.jpeg,.png" required area-required="true">
                         <label for="file_path"
                             class="px-4 py-2 text-white bg-blue-600 rounded-lg cursor-pointer hover:bg-blue-700">
                             Pilih File

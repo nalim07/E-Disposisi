@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DispositionController;
 use App\Http\Controllers\IncomingMailController;
 use App\Http\Controllers\OutgoingMailController;
+use App\Models\Disposition;
 
 // Redirect root to login
 Route::redirect('/', '/login');
@@ -41,7 +43,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'update' => 'surat-keluar.update',
             'destroy' => 'surat-keluar.destroy'
         ]);
-    Route::view('/disposisi', 'dispositions')->name('disposisi');
+    Route::resource('disposisi', DispositionController::class)->except(['create']);
+    Route::get('/disposisi/incoming/{incomingMail}', [DispositionController::class, 'create'])->name('disposisi.create');
+
     Route::view('/arsip', 'archive')->name('arsip');
 });
 

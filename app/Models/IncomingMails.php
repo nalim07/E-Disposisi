@@ -18,6 +18,7 @@ class IncomingMails extends Model
         'file_path',
         'original_name',
         'status',
+        'is_disposed',
         'created_by',
     ];
 

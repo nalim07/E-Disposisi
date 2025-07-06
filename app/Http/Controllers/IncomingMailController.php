@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\View\View;
+use App\Models\Disposition;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +17,12 @@ class IncomingMailController extends Controller
 
         if ($user->hasRole('admin')) {
             // Admin melihat semua surat masuk
-            $incomingMails = IncomingMails::orderBy('received_date', 'desc')->get();
+            $incomingMails = IncomingMails::orderBy('received_date', 'asc')->get();
         } elseif ($user->hasRole('pimpinan')) {
             // Pimpinan hanya melihat yang sudah ditindaklanjuti
             $incomingMails = IncomingMails::where('status', 'Sudah Ditindaklanjuti')
-                ->orderBy('received_date', 'desc')
+                ->where('is_disposed', false)
+                ->orderByDesc('received_date')
                 ->get();
         } else {
             // Role lain tidak mendapat surat masuk
