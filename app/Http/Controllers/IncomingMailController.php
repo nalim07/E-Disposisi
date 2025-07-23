@@ -80,6 +80,12 @@ class IncomingMailController extends Controller
         return view('incoming-mails.show', compact('incomingMail'));
     }
 
+    public function edit(IncomingMails $incomingMail)
+    {
+        $incomingMail = IncomingMails::findOrFail($incomingMail->id);
+        return view('incoming-mails.edit', compact('incomingMail'));
+    }
+
     public function update(Request $request, IncomingMails $incomingMail)
     {
         $validated = $request->validate([
