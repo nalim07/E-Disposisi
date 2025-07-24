@@ -8,6 +8,7 @@ use App\Models\Disposition;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class IncomingMailController extends Controller
 {
@@ -82,23 +83,35 @@ class IncomingMailController extends Controller
 
     public function edit(IncomingMails $incomingMail)
     {
-        $incomingMail = IncomingMails::findOrFail($incomingMail->id);
         return view('incoming-mails.edit', compact('incomingMail'));
     }
 
     public function update(Request $request, IncomingMails $incomingMail)
     {
         $validated = $request->validate([
-            'reference_number' => 'sometimes|unique:incoming_mails,reference_number,' . $incomingMail->id,
-            'sender' => 'sometimes',
-            'subject' => 'sometimes',
-            'received_date' => 'sometimes|date',
-            'status' => 'sometimes',
-            'user_id' => 'sometimes|exists:users,id'
+            'mail_number' => 'required|string|max:255|unique:incoming_mails,mail_number,' . $incomingMail->id,
+            'sender' => 'required|string|max:255',
+            'subject' => 'required|string|max:500',
+            'mail_date' => 'required|date',
+            'received_date' => 'required|date',
+            'file_path' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
+        // Handle file upload jika ada file baru
+        if ($request->hasFile('file_path')) {
+            // Hapus file lama jika ada
+            if ($incomingMail->file_path) {
+                Storage::delete($incomingMail->file_path);
+            }
+
+            $file = $request->file('file_path')->store('surat-masuk');
+            $validated['file_path'] = $file;
+            $validated['original_name'] = $request->file('file_path')->getClientOriginalName();
+        }
+
         $incomingMail->update($validated);
-        return $incomingMail;
+
+        return redirect()->route('surat-masuk.index')->with('success', 'Data surat berhasil diperbarui.');
     }
 
     public function send(IncomingMails $incomingMail)
