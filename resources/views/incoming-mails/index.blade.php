@@ -59,8 +59,9 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse ($incomingMails as $incomingMail)
                             <tr>
-                                <x-table-cell
-                                    class="text-center whitespace-nowrap">{{ $loop->iteration }}</x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    {{ ($incomingMails->currentPage() - 1) * $incomingMails->perPage() + $loop->iteration }}
+                                </x-table-cell>
                                 <x-table-cell
                                     class="text-center whitespace-nowrap">{{ $incomingMail->mail_number }}</x-table-cell>
                                 <x-table-cell
@@ -105,8 +106,10 @@
                                             </button>
 
                                             <!-- Modalnya -->
-                                            <x-confirm-modal modal-id="confirm-send-{{ $incomingMail->id }}"
-                                                :action="route('surat-masuk.send', $incomingMail->id)" />
+                                            <x-confirm-modal modalId="confirm-send-{{ $incomingMail->id }}" title="Kirim Surat"
+                                                message="Apakah Anda yakin ingin mengirim surat ini?"
+                                                action="{{ route('surat-masuk.send', $incomingMail->id) }}" method="PATCH"
+                                                confirmLabel="Kirim" icon="📤" buttonColor="blue" />
 
                                             {{-- Hapus --}}
                                             <x-form-button :action="route('surat-masuk.destroy', $incomingMail->id)"
@@ -138,11 +141,7 @@
             </div>
 
             <!-- Pagination -->
-            {{-- @if ($incomingMails->hasPages())
-                <div class="mt-4">
-                    {{ $incomingMails->links() }}
-                </div>
-            @endif --}}
+            <x-pagination :paginator="$incomingMails" />
         </div>
     </div>
 </x-app-layout>

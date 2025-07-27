@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('archives', function (Blueprint $table) {
             $table->id();
-            $table->morphs('archivable'); // changed from arsipable
-            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('outgoing_mail_id')->constrained('outgoing_mails')->onDelete('cascade');
+            $table->foreignId('archived_by')->constrained('users')->onDelete('cascade');
+            $table->timestamp('archived_at')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

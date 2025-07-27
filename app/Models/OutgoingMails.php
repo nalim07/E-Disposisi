@@ -6,6 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class OutgoingMails extends Model
 {
+    protected $table = 'outgoing_mails';
+    // protected $primaryKey = 'id';
+    // public $timestamps = true;
+
+    protected $fillable = [
+        'mail_number',
+        'purpose',
+        'subject',
+        'mail_date',
+        'received_date',
+        'file_path',
+        'original_name',
+        'status',
+    ];
+
     public function incomingMail()
     {
         return $this->belongsTo(IncomingMails::class);
@@ -18,6 +33,14 @@ class OutgoingMails extends Model
 
     public function archive()
     {
-        return $this->morphOne(Archive::class, 'archivable');
+        $this->update([
+            'status' => 'archived',
+            'archived_at' => now(),
+        ]);
+    }
+
+    public function scopeArchived($query)
+    {
+        return $query->where('status', 'archived');
     }
 }

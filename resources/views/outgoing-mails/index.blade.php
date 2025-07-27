@@ -1,384 +1,146 @@
 <x-app-layout>
     <x-slot name="title">Surat Keluar</x-slot>
+    <!-- Header Section -->
+    <div class="flex bg-primary shadow-sm">
+        <div class="py-7 px-6 flex items-center justify-between text-white w-full">
+            <!-- Judul dan Tombol Create -->
+            <div class="flex items-center gap-3">
+                <!-- Logo SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="49" height="55" viewBox="0 0 49 55" fill="none">
+                    <path
+                        d="M42.9391 16.4367L26.2322 7.34003C25.6931 7.04858 25.1005 6.89705 24.5 6.89705C23.8995 6.89705 23.3069 7.04858 22.7678 7.34003L6.06088 16.4367C5.16127 16.9177 4.40284 17.6683 3.87253 18.6025C3.34222 19.5367 3.06148 20.6167 3.0625 21.7186V41.1892C3.0625 44.446 5.49528 47.0954 8.486 47.0954H40.514C43.5047 47.0954 45.9375 44.446 45.9375 41.1892V21.7186C45.9385 20.6167 45.6578 19.5367 45.1275 18.6025C44.5972 17.6683 43.8387 16.9177 42.9391 16.4367ZM24.1536 10.3585C24.2614 10.3003 24.3799 10.27 24.5 10.27C24.6201 10.27 24.7386 10.3003 24.8464 10.3585L41.0566 19.1821L24.5957 28.1469C24.4879 28.2052 24.3694 28.2355 24.2493 28.2355C24.1292 28.2355 24.0106 28.2052 23.9028 28.1469L7.68975 19.3223L24.1536 10.3585Z"
+                        fill="#F5F5F5" />
+                </svg>
 
-    <section class="container px-4 mx-auto">
-        <div class="flex flex-col">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                    <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-800">
-                                <tr>
-                                    <th scope="col"
-                                        class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <div class="flex items-center gap-x-3">
-                                            <input type="checkbox"
-                                                class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700">
-                                            <button class="flex items-center gap-x-2">
-                                                <span>Invoice</span>
+                <h1 class="text-3xl font-bold mr-4">Surat Keluar</h1>
 
-                                                <svg class="h-3" viewBox="0 0 10 11" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
+                <!-- Create Button -->
+                @role('admin')
+                    <x-action-button-create href="{{ route('surat-keluar.create') }}"
+                        icon="M15 1.8125C11.5321 1.85318 8.2181 3.20295 5.76575 5.57356C3.3134 7.94417 1.91708 11.1477 1.875 14.5C1.91708 17.8523 3.3134 21.0558 5.76575 23.4264C8.2181 25.7971 11.5321 27.1468 15 27.1875C18.4679 27.1468 21.7819 25.7971 24.2343 23.4264C26.6866 21.0558 28.0829 17.8523 28.125 14.5C28.0829 11.1477 26.6866 7.94417 24.2343 5.57356C21.7819 3.20295 18.4679 1.85318 15 1.8125ZM22.5 15.4062H15.9375V21.75H14.0625V15.4062H7.5V13.5938H14.0625V7.25H15.9375V13.5938H22.5V15.4062Z"
+                        label="Tambah Data" />
+                @endrole
+            </div>
+
+            <!-- Grup Kanan: Form Pencarian -->
+            <div class="flex items-center">
+                <form action="" method="GET" class="flex bg-[#ECE6F0] rounded-full px-4 py-2">
+                    <input type="search" name="q" id="q" placeholder="Ketik untuk mencari data"
+                        class="w-72 px-2 py-2 text-base text-gray-800 font-normal border-none bg-transparent focus:ring-0 focus:outline-none"
+                        value="{{ request('q') }}" />
+                    <button type="submit" class="pr-2 py-2 bg-transparent">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.25 4.5a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zM20.25 20.25l-4.5-4.5" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-sm mt-6">
+        <div class="p-6 bg-white border-b border-gray-200">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <x-table-header>No</x-table-header>
+                            <x-table-header>Nomor Surat</x-table-header>
+                            <x-table-header>Pengirim</x-table-header>
+                            <x-table-header>Perihal</x-table-header>
+                            <x-table-header>Tanggal Terima</x-table-header>
+                            <x-table-header>Status</x-table-header>
+                            <x-table-header>Aksi</x-table-header>
+                        </tr>
+                    </thead>
+
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse ($outgoingMails as $outgoingMail)
+                            <tr>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    {{ ($outgoingMails->currentPage() - 1) * $outgoingMails->perPage() + $loop->iteration }}
+                                </x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $outgoingMail->mail_number }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $outgoingMail->purpose }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-left whitespace-nowrap">{{ $outgoingMail->subject }}</x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    {{ $outgoingMail->received_date }}
+                                </x-table-cell>
+                                <x-table-cell>
+                                    <span
+                                        class="bg-green-100 text-green-500 px-2 py-1 rounded-full text-xs font-medium">
+                                        {{ $outgoingMail->status == 'archived' ? 'Arsip' : 'Surat Ditindaklanjuti' }}
+                                    </span>
+                                </x-table-cell>
+                                <x-table-cell class="px-4 py-4 text-sm whitespace-nowrap">
+                                    <div class="flex flex-wrap justify-center gap-2">
+                                        @role('admin')
+                                            {{-- Edit --}}
+                                            <x-action-button href="{{ route('surat-keluar.edit', $outgoingMail->id) }}"
+                                                icon="M5.5 19.6476H6.925L16.7 9.87262L15.275 8.44762L5.5 18.2226V19.6476ZM3.5 21.6476V17.3976L16.7 4.22262C16.9 4.03929 17.1208 3.89762 17.3625 3.79762C17.6042 3.69762 17.8583 3.64762 18.125 3.64762C18.3917 3.64762 18.65 3.69762 18.9 3.79762C19.15 3.89762 19.3667 4.04762 19.55 4.24762L20.925 5.64762C21.125 5.83095 21.2708 6.04762 21.3625 6.29762C21.4542 6.54762 21.5 6.79762 21.5 7.04762C21.5 7.31429 21.4542 7.56845 21.3625 7.81012C21.2708 8.05179 21.125 8.27262 20.925 8.47262L7.75 21.6476H3.5Z"
+                                                label="Edit" color="orange" />
+
+                                            {{-- Lihat --}}
+                                            <x-action-button href="{{ route('surat-keluar.show', $outgoingMail->id) }}"
+                                                icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
+                                                label="Lihat" color="blue" />
+
+                                            {{-- Arsip --}}
+                                            <button type="button" title="Arsip"
+                                                onclick="document.getElementById('confirm-archive-{{ $outgoingMail->id }}').classList.remove('hidden')"
+                                                class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-green-500 hover:bg-green-600 text-white">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25"
+                                                    viewBox="0 0 24 25" fill="none">
                                                     <path
-                                                        d="M2.13347 0.0999756H2.98516L5.01902 4.79058H3.86226L3.45549 3.79907H1.63772L1.24366 4.79058H0.0996094L2.13347 0.0999756ZM2.54025 1.46012L1.96822 2.92196H3.11227L2.54025 1.46012Z"
-                                                        fill="currentColor" stroke="currentColor" stroke-width="0.1" />
-                                                    <path
-                                                        d="M0.722656 9.60832L3.09974 6.78633H0.811638V5.87109H4.35819V6.78633L2.01925 9.60832H4.43446V10.5617H0.722656V9.60832Z"
-                                                        fill="currentColor" stroke="currentColor" stroke-width="0.1" />
-                                                    <path
-                                                        d="M8.45558 7.25664V7.40664H8.60558H9.66065C9.72481 7.40664 9.74667 7.42274 9.75141 7.42691C9.75148 7.42808 9.75146 7.42993 9.75116 7.43262C9.75001 7.44265 9.74458 7.46304 9.72525 7.49314C9.72522 7.4932 9.72518 7.49326 9.72514 7.49332L7.86959 10.3529L7.86924 10.3534C7.83227 10.4109 7.79863 10.418 7.78568 10.418C7.77272 10.418 7.73908 10.4109 7.70211 10.3534L7.70177 10.3529L5.84621 7.49332C5.84617 7.49325 5.84612 7.49318 5.84608 7.49311C5.82677 7.46302 5.82135 7.44264 5.8202 7.43262C5.81989 7.42993 5.81987 7.42808 5.81994 7.42691C5.82469 7.42274 5.84655 7.40664 5.91071 7.40664H6.96578H7.11578V7.25664V0.633865C7.11578 0.42434 7.29014 0.249976 7.49967 0.249976H8.07169C8.28121 0.249976 8.45558 0.42434 8.45558 0.633865V7.25664Z"
-                                                        fill="currentColor" stroke="currentColor" stroke-width="0.3" />
+                                                        d="M12 18.9429L16 14.9429L14.6 13.5429L13 15.1429V10.9429H11V15.1429L9.4 13.5429L8 14.9429L12 18.9429ZM5 8.94287V19.9429H19V8.94287H5ZM5 21.9429C4.45 21.9429 3.975 21.7512 3.575 21.3679C3.19167 20.9679 3 20.4929 3 19.9429V7.46787C3 7.23454 3.03333 7.00954 3.1 6.79287C3.18333 6.5762 3.3 6.3762 3.45 6.19287L4.7 4.66787C4.88333 4.43454 5.10833 4.25954 5.375 4.14287C5.65833 4.00954 5.95 3.94287 6.25 3.94287H17.75C18.05 3.94287 18.3333 4.00954 18.6 4.14287C18.8833 4.25954 19.1167 4.43454 19.3 4.66787L20.55 6.19287C20.7 6.3762 20.8083 6.5762 20.875 6.79287C20.9583 7.00954 21 7.23454 21 7.46787V19.9429C21 20.4929 20.8 20.9679 20.4 21.3679C20.0167 21.7512 19.55 21.9429 19 21.9429H5ZM5.4 6.94287H18.6L17.75 5.94287H6.25L5.4 6.94287Z"
+                                                        fill="white" />
                                                 </svg>
                                             </button>
-                                        </div>
-                                    </th>
 
-                                    <th scope="col"
-                                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        Date
-                                    </th>
+                                            <!-- Modalnya -->
+                                            <x-confirm-modal modalId="confirm-archive-{{ $outgoingMail->id }}"
+                                                title="Arsipkan Surat"
+                                                message="Apakah Anda yakin ingin mengarsipkan surat ini? Surat akan dipindahkan ke arsip dan tidak bisa diubah."
+                                                action="{{ route('surat-keluar.archive', $outgoingMail->id) }}"
+                                                method="PATCH" confirmLabel="Arsipkan" icon="🗃️" buttonColor="blue" />
 
-                                    <th scope="col"
-                                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        Status
-                                    </th>
 
-                                    <th scope="col"
-                                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        Customer
-                                    </th>
+                                            {{-- Hapus --}}
+                                            <x-form-button :action="route('surat-keluar.destroy', $outgoingMail->id)"
+                                                icon="M6.5 21.9429C5.95 21.9429 5.47917 21.747 5.0875 21.3554C4.69583 20.9637 4.5 20.4929 4.5 19.9429V6.94286H3.5V4.94286H8.5V3.94286H14.5V4.94286H19.5V6.94286H18.5V19.9429C18.5 20.4929 18.3042 20.9637 17.9125 21.3554C17.5208 21.747 17.05 21.9429 16.5 21.9429H6.5ZM16.5 6.94286H6.5V19.9429H16.5V6.94286ZM8.5 17.9429H10.5V8.94286H8.5V17.9429ZM12.5 17.9429H14.5V8.94286H12.5V17.9429Z"
+                                                label="Hapus" color="red" method="DELETE" />
+                                            @elserole('pimpinan')
 
-                                    <th scope="col"
-                                        class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        Purchase
-                                    </th>
+                                            {{-- Disposisi --}}
+                                            <x-action-button href="{{ route('disposisi.create', $outgoingMail->id) }}"
+                                                icon="M3 20.9429V4.94286L22 12.9429L3 20.9429ZM5 17.9429L16.85 12.9429L5 7.94286V11.4429L11 12.9429L5 14.4429V17.9429Z"
+                                                label="Disposisi" color="orange" />
 
-                                    <th scope="col" class="relative py-3.5 px-4">
-                                        <span class="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                <tr>
-                                    <td
-                                        class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
-                                            <input type="checkbox"
-                                                class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700">
-
-                                            <span>#3066</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">Jan
-                                        6, 2022</td>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                        <div
-                                            class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 dark:bg-gray-800">
-                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-
-                                            <h2 class="text-sm font-normal">Paid</h2>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        <div class="flex items-center gap-x-2">
-                                            <img class="object-cover w-8 h-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                                                alt="">
-                                            <div>
-                                                <h2 class="text-sm font-medium text-gray-800 dark:text-white ">Arthur
-                                                    Melo</h2>
-                                                <p class="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                    authurmelo@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Monthly subscription</td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="flex items-center gap-x-6">
-                                            <button
-                                                class="text-gray-500 transition-colors duration-200 dark:hover:text-indigo-500 dark:text-gray-300 hover:text-indigo-500 focus:outline-none">
-                                                Archive
-                                            </button>
-
-                                            <button
-                                                class="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none">
-                                                Download
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td
-                                        class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
-                                            <input type="checkbox"
-                                                class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700">
-
-                                            <span>#3065</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">Jan
-                                        5, 2022</td>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                        <div
-                                            class="inline-flex items-center px-3 py-1 text-red-500 rounded-full gap-x-2 bg-red-100/60 dark:bg-gray-800">
-                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-
-                                            <h2 class="text-sm font-normal">Cancelled</h2>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        <div class="flex items-center gap-x-2">
-                                            <img class="object-cover w-8 h-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
-                                                alt="">
-                                            <div>
-                                                <h2 class="text-sm font-medium text-gray-800 dark:text-white ">Andi Lane
-                                                </h2>
-                                                <p class="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                    andi@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Monthly subscription</td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="flex items-center gap-x-6">
-                                            <button
-                                                class="text-gray-500 transition-colors duration-200 dark:hover:text-indigo-500 dark:text-gray-300 hover:text-indigo-500 focus:outline-none">
-                                                Archive
-                                            </button>
-
-                                            <button
-                                                class="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none">
-                                                Download
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td
-                                        class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
-                                            <input type="checkbox"
-                                                class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700">
-
-                                            <span>#3064</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Jan 5, 2022</td>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                        <div
-                                            class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 dark:bg-gray-800">
-                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-
-                                            <h2 class="text-sm font-normal">Paid</h2>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        <div class="flex items-center gap-x-2">
-                                            <img class="object-cover w-8 h-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=761&q=80"
-                                                alt="">
-                                            <div>
-                                                <h2 class="text-sm font-medium text-gray-800 dark:text-white ">Kate
-                                                    Morrison</h2>
-                                                <p class="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                    kate@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Monthly subscription</td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="flex items-center gap-x-6">
-                                            <button
-                                                class="text-gray-500 transition-colors duration-200 dark:hover:text-indigo-500 dark:text-gray-300 hover:text-indigo-500 focus:outline-none">
-                                                Archive
-                                            </button>
-
-                                            <button
-                                                class="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none">
-                                                Download
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td
-                                        class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
-                                            <input type="checkbox"
-                                                class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700">
-
-                                            <span>#3063</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Jan 4, 2022</td>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                        <div
-                                            class="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 dark:bg-gray-800">
-                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-
-                                            <h2 class="text-sm font-normal">Paid</h2>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        <div class="flex items-center gap-x-2">
-                                            <img class="object-cover w-8 h-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1506863530036-1efeddceb993?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1344&q=80"
-                                                alt="">
-                                            <div>
-                                                <h2 class="text-sm font-medium text-gray-800 dark:text-white ">Candice
-                                                    Wu</h2>
-                                                <p class="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                    candice@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Monthly subscription</td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="flex items-center gap-x-6">
-                                            <button
-                                                class="text-gray-500 transition-colors duration-200 dark:hover:text-indigo-500 dark:text-gray-300 hover:text-indigo-500 focus:outline-none">
-                                                Archive
-                                            </button>
-
-                                            <button
-                                                class="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none">
-                                                Download
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td
-                                        class="px-4 py-4 text-sm font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                                        <div class="inline-flex items-center gap-x-3">
-                                            <input type="checkbox"
-                                                class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700">
-
-                                            <span>#3062</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Jan 4, 2022</td>
-                                    <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                        <div
-                                            class="inline-flex items-center px-3 py-1 text-gray-500 rounded-full gap-x-2 bg-gray-100/60 dark:bg-gray-800">
-                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M4.5 7L2 4.5M2 4.5L4.5 2M2 4.5H8C8.53043 4.5 9.03914 4.71071 9.41421 5.08579C9.78929 5.46086 10 5.96957 10 6.5V10"
-                                                    stroke="#667085" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-
-                                            <h2 class="text-sm font-normal">Refunded</h2>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        <div class="flex items-center gap-x-2">
-                                            <img class="object-cover w-8 h-8 rounded-full"
-                                                src="https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=644&q=80"
-                                                alt="">
-                                            <div>
-                                                <h2 class="text-sm font-medium text-gray-800 dark:text-white ">Orlando
-                                                    Diggs</h2>
-                                                <p class="text-xs font-normal text-gray-600 dark:text-gray-400">
-                                                    orlando@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                        Monthly subscription</td>
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="flex items-center gap-x-6">
-                                            <button
-                                                class="text-gray-500 transition-colors duration-200 dark:hover:text-indigo-500 dark:text-gray-300 hover:text-indigo-500 focus:outline-none">
-                                                Archive
-                                            </button>
-
-                                            <button
-                                                class="text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none">
-                                                Download
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex items-center justify-between mt-6">
-            <a href="#"
-                class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                </svg>
-
-                <span>
-                    previous
-                </span>
-            </a>
-
-            <div class="items-center hidden md:flex gap-x-3">
-                <a href="#"
-                    class="px-2 py-1 text-sm text-blue-500 rounded-md dark:bg-gray-800 bg-blue-100/60">1</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">2</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">3</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">...</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">12</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">13</a>
-                <a href="#"
-                    class="px-2 py-1 text-sm text-gray-500 rounded-md dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100">14</a>
+                                            <x-action-button href="{{ route('surat-keluar.show', $outgoingMail->id) }}"
+                                                icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
+                                                label="Lihat" color="blue" />
+                                        @endrole
+                                    </div>
+                                </x-table-cell>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                    Tidak ada data
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
 
-            <a href="#"
-                class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-                <span>
-                    Next
-                </span>
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
-            </a>
+            <!-- Pagination -->
+            <x-pagination :paginator="$outgoingMails" />
         </div>
-    </section>
+    </div>
 </x-app-layout>

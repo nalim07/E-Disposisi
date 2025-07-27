@@ -43,6 +43,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'update' => 'surat-keluar.update',
             'destroy' => 'surat-keluar.destroy'
         ]);
+
+    Route::patch('/surat-keluar/{outgoingMail}/archive', [OutgoingMailController::class, 'archive'])
+        ->name('surat-keluar.archive');
+        
     Route::resource('disposisi', DispositionController::class)->except(['create']);
     Route::get('/disposisi/incoming/{incomingMail}', [DispositionController::class, 'create'])->name('disposisi.create');
 

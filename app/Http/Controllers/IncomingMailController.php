@@ -18,13 +18,13 @@ class IncomingMailController extends Controller
 
         if ($user->hasRole('admin')) {
             // Admin melihat semua surat masuk
-            $incomingMails = IncomingMails::orderBy('received_date', 'asc')->get();
+            $incomingMails = IncomingMails::orderBy('received_date', 'asc')->paginate(5);
         } elseif ($user->hasRole('pimpinan')) {
             // Pimpinan hanya melihat yang sudah ditindaklanjuti
             $incomingMails = IncomingMails::where('status', 'Sudah Ditindaklanjuti')
                 ->where('is_disposed', false)
                 ->orderByDesc('received_date')
-                ->get();
+                ->paginate(5);
         } else {
             // Role lain tidak mendapat surat masuk
             $incomingMails = collect();
