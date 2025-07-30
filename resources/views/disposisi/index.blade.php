@@ -20,40 +20,64 @@
     <div class="py-10">
         <div class="w-full">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h1 class="text-3xl font-bold mb-6">Daftar Disposisi</h1>
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                No</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Surat Masuk</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Penerima</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Isi Disposisi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Batas Waktu</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Sifat</th>
-                            <th class="px-6 py-3"></th>
+                            <x-table-header>
+                                No</x-table-header>
+                            <x-table-header>
+                                Surat Masuk</x-table-header>
+                            <x-table-header>
+                                Penerima</x-table-header>
+                            <x-table-header>
+                                Isi Disposisi</x-table-header>
+                            <x-table-header>
+                                Batas Waktu</x-table-header>
+                            <x-table-header>
+                                Sifat</x-table-header>
+                            <x-table-header class="px-6 py-3">Aksi</x-table-header>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($dispositions as $disposition)
+                        @forelse ($dispositions as $disposition)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $disposition->incomingMail->subject }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $disposition->recipient->name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $disposition->content }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $disposition->deadline }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $disposition->priority }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <a href="{{ route('disposisi.show', $disposition->id) }}"
-                                        class="text-blue-600 hover:underline">Lihat</a>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $loop->iteration }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $disposition->incomingMail->subject }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $disposition->recipient->username }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $disposition->content }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $disposition->deadline }}</x-table-cell>
+                                <x-table-cell
+                                    class="text-center whitespace-nowrap">{{ $disposition->priority }}</x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    <x-action-button href="{{ route('disposisi.show', $disposition->id) }}"
+                                        icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
+                                        label="Lihat" color="blue" />
+
+                                    <x-form-button :action="route('disposisi.destroy', $disposition->id)"
+                                        icon="M6.5 21.9429C5.95 21.9429 5.47917 21.747 5.0875 21.3554C4.69583 20.9637 4.5 20.4929 4.5 19.9429V6.94286H3.5V4.94286H8.5V3.94286H14.5V4.94286H19.5V6.94286H18.5V19.9429C18.5 20.4929 18.3042 20.9637 17.9125 21.3554C17.5208 21.747 17.05 21.9429 16.5 21.9429H6.5ZM16.5 6.94286H6.5V19.9429H16.5V6.94286ZM8.5 17.9429H10.5V8.94286H8.5V17.9429ZM12.5 17.9429H14.5V8.94286H12.5V17.9429Z"
+                                        label="Hapus" color="red" method="DELETE" />
+                                </x-table-cell>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-5 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        {{-- <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg> --}}
+                                        <h3 class="text-lg font-medium text-gray-900">Tidak ada data disposisi</h3>
+                                        {{-- <p class="text-gray-500 text-sm">Belum ada disposisi yang tersedia saat ini.</p> --}}
+                                    </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @endforelse
                     </tbody>
                 </table>
             </div>

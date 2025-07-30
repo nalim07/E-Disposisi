@@ -69,7 +69,10 @@ class DispositionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $disposition = Disposition::with(['incomingMail', 'recipient', 'creator'])
+            ->findOrFail($id);
+
+        return view('disposisi.show', compact('disposition'));
     }
 
     /**
@@ -93,6 +96,9 @@ class DispositionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $disposition = Disposition::findOrFail($id);
+        $disposition->delete();
+
+        return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil dihapus.');
     }
 }
