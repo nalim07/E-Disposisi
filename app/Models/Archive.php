@@ -16,4 +16,10 @@ class Archive extends Model
     {
         return $this->morphTo();
     }
+
+    // Outgoing
+    public function outgoingMail()
+    {
+        return $this->belongsTo(OutgoingMails::class);
+    }
 }

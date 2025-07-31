@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArchiveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -46,11 +47,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::patch('/surat-keluar/{outgoingMail}/archive', [OutgoingMailController::class, 'archive'])
         ->name('surat-keluar.archive');
-        
+
     Route::resource('disposisi', DispositionController::class)->except(['create']);
     Route::get('/disposisi/incoming/{incomingMail}', [DispositionController::class, 'create'])->name('disposisi.create');
 
-    Route::view('/arsip', 'archive')->name('arsip');
+    Route::resource('arsip', ArchiveController::class)
+        ->except(['create', 'update', 'destroy'])
+        ->names([
+            'index' => 'arsip.index',
+            'store' => 'arsip.store',
+            'show' => 'arsip.show'
+        ]);
 });
 
 // Profile routes

@@ -47,7 +47,7 @@
                         </div>
 
                         @can('view_arsip')
-                            <x-nav-link :href="route('arsip')" :active="request()->routeIs('arsip')">
+                            <x-nav-link :href="route('arsip.index')" :active="request()->routeIs('arsip.index')">
                                 {{ __('Arsip') }}
                             </x-nav-link>
                         @endcan
