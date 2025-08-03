@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class OutgoingMails extends Model
 {
     protected $table = 'outgoing_mails';
-    // protected $primaryKey = 'id';
-    // public $timestamps = true;
 
     protected $fillable = [
         'mail_number',

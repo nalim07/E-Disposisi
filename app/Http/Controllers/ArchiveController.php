@@ -12,7 +12,7 @@ class ArchiveController extends Controller
      */
     public function index()
     {
-        $archives = Archive::with('archivable')->get();
+        $archives = Archive::with('outgoingMail')->get();
 
         return view('archive.index', compact('archives'));
     }
@@ -36,9 +36,11 @@ class ArchiveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Archive $archive)
+    public function show($id)
     {
-        //
+        $archive = Archive::with('outgoingMail')->findOrFail($id);
+
+        return view('archive.show', compact('archive'));
     }
 
     /**
@@ -62,6 +64,8 @@ class ArchiveController extends Controller
      */
     public function destroy(Archive $archive)
     {
-        //
+        $archive->delete();
+
+        return redirect()->route('arsip.index');
     }
 }

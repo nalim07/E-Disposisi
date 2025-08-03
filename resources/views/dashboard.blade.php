@@ -67,7 +67,7 @@
                     <h2 class="text-xl font-semibold">Arsip</h2>
                 </div>
                 <p class="mt-2">Jumlah: {{ $archiveCount }}</p>
-                <a href="{{ route('arsip') }}" class="mt-4 inline-block hover:underline">Lihat
+                <a href="{{ route('arsip.index') }}" class="mt-4 inline-block hover:underline">Lihat
                     Detail</a>
             </div>
         @endrole

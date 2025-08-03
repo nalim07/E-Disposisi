@@ -48,7 +48,7 @@
                         <tr>
                             <x-table-header>No</x-table-header>
                             <x-table-header>Nomor Surat</x-table-header>
-                            <x-table-header>Pengirim</x-table-header>
+                            <x-table-header>Tujuan</x-table-header>
                             <x-table-header>Perihal</x-table-header>
                             <x-table-header>Tanggal Terima</x-table-header>
                             <x-table-header>Status</x-table-header>
@@ -74,7 +74,7 @@
                                 <x-table-cell>
                                     <span
                                         class="bg-green-100 text-green-500 px-2 py-1 rounded-full text-xs font-medium">
-                                        {{ $outgoingMail->status == 'archived' ? 'Arsip' : 'Surat Ditindaklanjuti' }}
+                                        {{ $outgoingMail->status == 'Arsip' ? 'Arsip' : 'Surat Ditindaklanjuti' }}
                                     </span>
                                 </x-table-cell>
                                 <x-table-cell class="px-4 py-4 text-sm whitespace-nowrap">

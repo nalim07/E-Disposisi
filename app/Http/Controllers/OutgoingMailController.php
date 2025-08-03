@@ -117,7 +117,7 @@ class OutgoingMailController extends Controller
     // 🔐 Tambahan: arsipkan surat
     public function archive(OutgoingMails $outgoingMail)
     {
-        $outgoingMail->status = 'archived';
+        $outgoingMail->status = 'Arsip';
         $outgoingMail->save();
 
         // Opsional: buat entri di tabel `archives`

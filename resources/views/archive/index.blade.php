@@ -41,7 +41,7 @@
                         <tr>
                             <x-table-header>No</x-table-header>
                             <x-table-header>Nomor Surat</x-table-header>
-                            <x-table-header>Pengirim</x-table-header>
+                            <x-table-header>Tujuan</x-table-header>
                             <x-table-header>Perihal</x-table-header>
                             <x-table-header>Tanggal</x-table-header>
                             <x-table-header>Aksi</x-table-header>
@@ -50,20 +50,34 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse ($archives as $archive)
                             <tr>
-                                <x-table-cell
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loop->iteration }}
+                                <x-table-cell class="text-center whitespace-nowrap">{{ $loop->iteration }}
                                 </x-table-cell>
-                                <x-table-cell class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $archive->outgoingMail->number ?? '-' }}</x-table-cell>
-                                <x-table-cell class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $archive->outgoingMail->sender ?? '-' }}</x-table-cell>
-                                <x-table-cell class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    {{ $archive->outgoingMail->mail_number ?? '-' }}</x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    {{ $archive->outgoingMail->purpose ?? '-' }}</x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
                                     {{ $archive->outgoingMail->subject ?? '-' }}</x-table-cell>
-                                {{-- <x-table-cell class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $archive->archived_at?->format('d-m-Y') ?? '-' }}</x-table-cell> --}}
-                                <x-table-cell class="px-6 py-4 whitespace-nowrap">
-                                    <a href="{{ route('arsip.show', $archive) }}"
-                                        class="text-blue-600 hover:text-blue-900">Detail</a>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    <div class="space-y-1">
+                                        <div>Tgl Surat:
+                                            {{ $archive->outgoingMail->mail_date ? \Carbon\Carbon::parse($archive->outgoingMail->mail_date)->format('d-m-Y') : '-' }}
+                                        </div>
+                                        <div>Tgl Arsip:
+                                            {{ $archive->archived_at ? \Carbon\Carbon::parse($archive->archived_at)->format('d-m-Y') : '-' }}
+                                        </div>
+                                    </div>
+                                </x-table-cell>
+                                <x-table-cell class="text-center whitespace-nowrap">
+                                    {{-- Download --}}
+                                    <x-action-button href="{{ route('arsip.show', $archive->id) }}"
+                                        icon="M11.5 16L6.5 11L7.9 9.55L10.5 12.15V4H12.5V12.15L15.1 9.55L16.5 11L11.5 16ZM5.5 20C4.95 20 4.47917 19.8042 4.0875 19.4125C3.69583 19.0208 3.5 18.55 3.5 18V15H5.5V18H17.5V15H19.5V18C19.5 18.55 19.3042 19.0208 18.9125 19.4125C18.5208 19.8042 18.05 20 17.5 20H5.5Z"
+                                        label="Download" color="green" />
+
+                                    {{-- Show --}}
+                                    <x-action-button href="{{ route('arsip.show', $archive->id) }}"
+                                        icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
+                                        label="Lihat" color="blue" />
                                 </x-table-cell>
                             </tr>
                         @empty

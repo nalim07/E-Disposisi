@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('received_date');
             $table->string('file_path');
             $table->string('original_name');
-            $table->enum('status', ['Sudah Ditindaklanjuti', 'archived'])->default('Sudah Ditindaklanjuti');
+            $table->enum('status', ['Sudah Ditindaklanjuti', 'Arsip'])->default('Sudah Ditindaklanjuti');
             $table->timestamp('archived_at')->nullable();
             $table->timestamps();
         });

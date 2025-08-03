@@ -12,14 +12,14 @@ class Archive extends Model
         'archived_at',
     ];
 
-    public function archivable()
-    {
-        return $this->morphTo();
-    }
+    // public function archivable()
+    // {
+    //     return $this->morphTo();
+    // }
 
     // Outgoing
     public function outgoingMail()
     {
-        return $this->belongsTo(OutgoingMails::class);
+        return $this->belongsTo(OutgoingMails::class, 'outgoing_mail_id');
     }
 }
