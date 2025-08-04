@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Archive;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArchiveController extends Controller
 {
@@ -67,5 +68,18 @@ class ArchiveController extends Controller
         $archive->delete();
 
         return redirect()->route('arsip.index');
+    }
+
+    public function download(Archive $archive)
+    {
+        $mail = $archive->outgoingMail;
+
+        if (!$mail || !$mail->file_path || !Storage::disk('public')->exists($mail->file_path)) {
+            return back()->with('error', 'File tidak ditemukan.');
+        }
+
+        $file = Storage::disk('public')->path($mail->file_path);
+
+        return response()->download($file, $mail->original_name);
     }
 }

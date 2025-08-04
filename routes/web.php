@@ -58,6 +58,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'store' => 'arsip.store',
             'show' => 'arsip.show'
         ]);
+
+    // Download routes
+    Route::get('arsip/{archive}/download', [ArchiveController::class, 'download'])
+        ->name('arsip.download');
 });
 
 // Profile routes

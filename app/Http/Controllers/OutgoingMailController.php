@@ -16,9 +16,9 @@ class OutgoingMailController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            $outgoingMails = OutgoingMails::orderBy('created_at', 'desc')->paginate(10);
+            $outgoingMails = OutgoingMails::where('status', 'Sudah Ditindaklanjuti')->paginate(5);
         } else {
-            $outgoingMails = collect(); // Atur sesuai kebutuhan role lainnya
+            $outgoingMails = collect();
         }
 
         return view('outgoing-mails.index', compact('outgoingMails'));

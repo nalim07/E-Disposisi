@@ -70,7 +70,7 @@
                                 </x-table-cell>
                                 <x-table-cell class="text-center whitespace-nowrap">
                                     {{-- Download --}}
-                                    <x-action-button href="{{ route('arsip.show', $archive->id) }}"
+                                    <x-action-button href="{{ route('arsip.download', $archive->id) }}"
                                         icon="M11.5 16L6.5 11L7.9 9.55L10.5 12.15V4H12.5V12.15L15.1 9.55L16.5 11L11.5 16ZM5.5 20C4.95 20 4.47917 19.8042 4.0875 19.4125C3.69583 19.0208 3.5 18.55 3.5 18V15H5.5V18H17.5V15H19.5V18C19.5 18.55 19.3042 19.0208 18.9125 19.4125C18.5208 19.8042 18.05 20 17.5 20H5.5Z"
                                         label="Download" color="green" />
 
