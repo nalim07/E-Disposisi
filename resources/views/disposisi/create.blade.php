@@ -26,11 +26,11 @@
 
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Tujuan Disposisi</label>
-                        <select name="recipient_id" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                            <option value="" disabled selected hidden>Pilih Jabatan</option>
-                            @foreach ($employees as $employee)
-                                <option value="{{ $employee->id }}">
-                                    {{ $employee->name }} {{ $employee->position->name ?? 'Tidak ada jabatan' }}
+                        <select name="recipient_role" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="" disabled selected hidden>Pilih Role</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}">
+                                    {{ ucfirst($role->name) }}
                                 </option>
                             @endforeach
                         </select>

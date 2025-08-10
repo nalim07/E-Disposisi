@@ -9,6 +9,7 @@ use App\Models\Disposition;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class DispositionController extends Controller
 {
@@ -28,28 +29,37 @@ class DispositionController extends Controller
      */
     public function create(IncomingMails $incomingMail)
     {
-        $employees = Employee::with('position')
-            ->get()
-            ->unique(fn($item) => $item->position->id); // atau $item->position_id
+        // Get all roles except admin (as admin typically creates disposisi)
+        $roles = Role::where('name', '!=', 'pimpinan')->get();
 
-
-        return view('disposisi.create', compact('incomingMail', 'employees'));
+        return view('disposisi.create', compact('incomingMail', 'roles'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'incoming_mail_id' => 'required|exists:incoming_mails,id',
-            'recipient_id' => 'required|exists:users,id',
+            'recipient_role' => 'required|exists:roles,name',
             'content' => 'required',
             'deadline' => 'required|date',
             'priority' => 'required|in:Penting,Biasa,Segera',
             'notes' => 'nullable',
         ]);
 
+        // Find users with the specified role
+        $usersWithRole = Role::findByName($request->recipient_role)->users;
+
+        // If there are users with this role, we'll assign to the first one
+        // In a real application, you might want to implement a more sophisticated assignment logic
+        $recipientId = $usersWithRole->first() ? $usersWithRole->first()->id : null;
+
+        if (!$recipientId) {
+            return redirect()->back()->with('error', 'Tidak ada pengguna dengan role ' . $request->recipient_role);
+        }
+
         Disposition::create([
             'incoming_mail_id' => $request->incoming_mail_id,
-            'recipient_id' => $request->recipient_id,
+            'recipient_id' => $recipientId,
             'content' => $request->content,
             'deadline' => $request->deadline,
             'priority' => $request->priority,

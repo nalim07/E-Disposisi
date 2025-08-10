@@ -33,6 +33,7 @@ class RolePermissionSeeder extends Seeder
             'view_beranda',
             'view_surat-masuk',
             'view_surat-keluar',
+            'view_disposisi',
             'view_arsip'
         ]);
 

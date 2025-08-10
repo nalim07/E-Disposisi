@@ -46,6 +46,12 @@
                             </div>
                         </div>
 
+                        @can('view_disposisi')
+                            <x-nav-link :href="route('disposisi.index')" :active="request()->routeIs('disposisi.index')">
+                                {{ __('Disposisi') }}
+                            </x-nav-link>
+                        @endcan
+
                         @can('view_arsip')
                             <x-nav-link :href="route('arsip.index')" :active="request()->routeIs('arsip.index')">
                                 {{ __('Arsip') }}
