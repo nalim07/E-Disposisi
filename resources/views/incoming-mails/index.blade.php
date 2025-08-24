@@ -1,5 +1,13 @@
 <x-app-layout>
     <x-slot name="title">Surat Masuk</x-slot>
+
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
+        <x-flash-message type="success" :message="session('success')" />
+        <x-flash-message type="error" :message="session('error')" />
+        <x-flash-message type="info" :message="session('info')" class="font-medium text-sm text-blue-600" />
+    </div>
+
     <!-- Header Section -->
     <div class="flex bg-primary shadow-sm">
         <div class="py-7 px-6 flex items-center justify-between text-white w-full">
@@ -29,7 +37,7 @@
                         value="{{ request('q') }}" />
                     <button type="submit" class="pr-2 py-2 bg-transparent">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6">
+                            stroke="currentColor" class="w-6 h-6 text-gray-600">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M11.25 4.5a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zM20.25 20.25l-4.5-4.5" />
                         </svg>

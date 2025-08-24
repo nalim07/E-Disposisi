@@ -1,6 +1,13 @@
 <x-app-layout>
     <x-slot name="title">Disposisi</x-slot>
 
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto py-2 px-4 sm:px-6 lg:px-8">
+        <x-flash-message type="success" :message="session('success')" />
+        <x-flash-message type="error" :message="session('error')" />
+        <x-flash-message type="info" :message="session('info')" class="font-medium text-sm text-blue-600" />
+    </div>
+
     <div class="flex bg-primary shadow-sm">
         <div class="py-7 px-6 flex items-center justify-between text-white w-full">
             <!-- Judul dan Tombol Create -->

@@ -5,17 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\Archive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ArchiveController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $archives = Archive::with('outgoingMail')->get();
+        try {
+            $query = Archive::with('outgoingMail');
 
-        return view('archive.index', compact('archives'));
+            // Handle search functionality
+            if ($request->has('q') && $request->q != '') {
+                $searchTerm = $request->q;
+                $query->whereHas('outgoingMail', function ($outgoingQuery) use ($searchTerm) {
+                    $outgoingQuery->where('mail_number', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('purpose', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('subject', 'LIKE', "%{$searchTerm}%");
+                });
+            }
+
+            $archives = $query->paginate(10);
+            return view('archive.index', compact('archives'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat data arsip: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -39,9 +55,12 @@ class ArchiveController extends Controller
      */
     public function show($id)
     {
-        $archive = Archive::with('outgoingMail')->findOrFail($id);
-
-        return view('archive.show', compact('archive'));
+        try {
+            $archive = Archive::with('outgoingMail')->findOrFail($id);
+            return view('archive.show', compact('archive'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat detail arsip: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -65,21 +84,41 @@ class ArchiveController extends Controller
      */
     public function destroy(Archive $archive)
     {
-        $archive->delete();
+        try {
+            $result = $archive->delete();
 
-        return redirect()->route('arsip.index');
+            if ($result) {
+                return redirect()->route('arsip.index')->with('success', 'Arsip berhasil dihapus.');
+            } else {
+                return back()->with('error', 'Gagal menghapus arsip. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat menghapus arsip: ' . $e->getMessage());
+        }
     }
 
     public function download(Archive $archive)
     {
-        $mail = $archive->outgoingMail;
+        try {
+            $mail = $archive->outgoingMail;
 
-        if (!$mail || !$mail->file_path || !Storage::disk('public')->exists($mail->file_path)) {
-            return back()->with('error', 'File tidak ditemukan.');
+            if (!$mail) {
+                return back()->with('error', 'Data surat tidak ditemukan.');
+            }
+
+            if (!$mail->file_path) {
+                return back()->with('error', 'File surat tidak ditemukan.');
+            }
+
+            if (!Storage::disk('public')->exists($mail->file_path)) {
+                return back()->with('error', 'File tidak ditemukan di server.');
+            }
+
+            $file = Storage::disk('public')->path($mail->file_path);
+
+            return response()->download($file, $mail->original_name);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat mengunduh file: ' . $e->getMessage());
         }
-
-        $file = Storage::disk('public')->path($mail->file_path);
-
-        return response()->download($file, $mail->original_name);
     }
 }

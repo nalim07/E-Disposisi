@@ -103,15 +103,6 @@
                                     </span>
                                 </div>
 
-                                @if ($incomingMail->file_path)
-                                    <p class="text-sm text-gray-600">
-                                        File sebelumnya:
-                                        <a href="{{ asset('storage/' . $incomingMail->file_path) }}" target="_blank"
-                                            class="text-blue-600 underline">
-                                            {{ $incomingMail->original_name }}
-                                        </a>
-                                    </p>
-                                @endif
 
                                 @error('file_path')
                                     <p class="text-sm text-red-600">{{ $message }}</p>
@@ -135,4 +126,11 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('file_path').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : '{{ $incomingMail->original_name ?? 'Format: PDF, JPG, PNG (Maks. 2MB)' }}';
+            document.getElementById('file-name').textContent = fileName;
+        });
+    </script>
 </x-app-layout>

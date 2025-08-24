@@ -18,9 +18,12 @@ class DispositionController extends Controller
      */
     public function index()
     {
-        return view('disposisi.index', [
-            'dispositions' => Disposition::with(['incomingMail', 'recipient'])->get(),
-        ]);
+        try {
+            $dispositions = Disposition::with(['incomingMail', 'recipient'])->get();
+            return view('disposisi.index', compact('dispositions'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat data disposisi: ' . $e->getMessage());
+        }
     }
 
 
@@ -29,10 +32,13 @@ class DispositionController extends Controller
      */
     public function create(IncomingMails $incomingMail)
     {
-        // Get all roles except admin (as admin typically creates disposisi)
-        $roles = Role::where('name', '!=', 'pimpinan')->get();
-
-        return view('disposisi.create', compact('incomingMail', 'roles'));
+        try {
+            // Get all roles except admin (as admin typically creates disposisi)
+            $roles = Role::where('name', '!=', 'pimpinan')->get();
+            return view('disposisi.create', compact('incomingMail', 'roles'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat form disposisi: ' . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
@@ -46,32 +52,49 @@ class DispositionController extends Controller
             'notes' => 'nullable',
         ]);
 
-        // Find users with the specified role
-        $usersWithRole = Role::findByName($request->recipient_role)->users;
+        try {
+            // Find users with the specified role
+            $role = Role::findByName($request->recipient_role);
+            if (!$role) {
+                return redirect()->back()->with('error', 'Role ' . $request->recipient_role . ' tidak ditemukan.');
+            }
 
-        // If there are users with this role, we'll assign to the first one
-        // In a real application, you might want to implement a more sophisticated assignment logic
-        $recipientId = $usersWithRole->first() ? $usersWithRole->first()->id : null;
+            $usersWithRole = $role->users;
 
-        if (!$recipientId) {
-            return redirect()->back()->with('error', 'Tidak ada pengguna dengan role ' . $request->recipient_role);
+            // If there are users with this role, we'll assign to the first one
+            // In a real application, you might want to implement a more sophisticated assignment logic
+            $recipientId = $usersWithRole->first() ? $usersWithRole->first()->id : null;
+
+            if (!$recipientId) {
+                return redirect()->back()->with('error', 'Tidak ada pengguna dengan role ' . $request->recipient_role);
+            }
+
+            $disposition = Disposition::create([
+                'incoming_mail_id' => $request->incoming_mail_id,
+                'recipient_id' => $recipientId,
+                'content' => $request->content,
+                'deadline' => $request->deadline,
+                'priority' => $request->priority,
+                'notes' => $request->notes,
+                'created_by' => Auth::id(),
+            ]);
+
+            if ($disposition) {
+                $mailUpdated = IncomingMails::where('id', $request->incoming_mail_id)->update([
+                    'is_disposed' => true,
+                ]);
+
+                if ($mailUpdated) {
+                    return redirect()->route('surat-masuk.index')->with('success', 'Disposisi berhasil dibuat dan surat telah ditandai sebagai sudah didisposisi.');
+                } else {
+                    return redirect()->route('surat-masuk.index')->with('success', 'Disposisi berhasil dibuat namun gagal memperbarui status surat.');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Gagal membuat disposisi. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat disposisi: ' . $e->getMessage());
         }
-
-        Disposition::create([
-            'incoming_mail_id' => $request->incoming_mail_id,
-            'recipient_id' => $recipientId,
-            'content' => $request->content,
-            'deadline' => $request->deadline,
-            'priority' => $request->priority,
-            'notes' => $request->notes,
-            'created_by' => Auth::id(),
-        ]);
-
-        IncomingMails::where('id', $request->incoming_mail_id)->update([
-            'is_disposed' => true,
-        ]);
-
-        return redirect()->route('surat-masuk.index')->with('success', 'Disposisi berhasil dibuat.');
     }
 
     /**
@@ -79,10 +102,14 @@ class DispositionController extends Controller
      */
     public function show(string $id)
     {
-        $disposition = Disposition::with(['incomingMail', 'recipient', 'creator'])
-            ->findOrFail($id);
+        try {
+            $disposition = Disposition::with(['incomingMail', 'recipient', 'creator'])
+                ->findOrFail($id);
 
-        return view('disposisi.show', compact('disposition'));
+            return view('disposisi.show', compact('disposition'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat detail disposisi: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -106,9 +133,17 @@ class DispositionController extends Controller
      */
     public function destroy(string $id)
     {
-        $disposition = Disposition::findOrFail($id);
-        $disposition->delete();
+        try {
+            $disposition = Disposition::findOrFail($id);
+            $result = $disposition->delete();
 
-        return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil dihapus.');
+            if ($result) {
+                return redirect()->route('disposisi.index')->with('success', 'Disposisi berhasil dihapus.');
+            } else {
+                return back()->with('error', 'Gagal menghapus disposisi. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat menghapus disposisi: ' . $e->getMessage());
+        }
     }
 }
