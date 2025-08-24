@@ -125,6 +125,11 @@ class IncomingMailController extends Controller
 
     public function destroy(IncomingMails $incomingMail)
     {
+        // Delete the associated file if it exists
+        if ($incomingMail->file_path) {
+            Storage::disk('public')->delete($incomingMail->file_path);
+        }
+
         $incomingMail->delete();
 
         return redirect()->route('surat-masuk.index')
