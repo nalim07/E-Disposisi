@@ -7,7 +7,9 @@ use Illuminate\View\View;
 use App\Models\Disposition;
 use Illuminate\Http\Request;
 use App\Models\IncomingMails;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,10 +23,10 @@ class IncomingMailController extends Controller
         // Handle search functionality
         if ($request->has('q') && $request->q != '') {
             $searchTerm = $request->q;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('mail_number', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('sender', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('subject', 'LIKE', "%{$searchTerm}%");
+                    ->orWhere('sender', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('subject', 'LIKE', "%{$searchTerm}%");
             });
         }
 
@@ -213,6 +215,9 @@ class IncomingMailController extends Controller
                 $result = $incomingMail->update(['status' => 'Sudah Ditindaklanjuti']);
 
                 if ($result) {
+                    // Send email notification to all leaders (pimpinan) after status change
+                    $this->sendEmailNotificationToLeaders($incomingMail);
+
                     return redirect()->route('surat-masuk.index')
                         ->with('success', 'Surat berhasil dikirim untuk ditindaklanjuti.');
                 } else {
@@ -297,4 +302,71 @@ class IncomingMailController extends Controller
 
         return true;
     }
+
+    /**
+     * Send email notification to all leaders when a new incoming mail is created
+     */
+    private function sendEmailNotificationToLeaders($incomingMail)
+    {
+        try {
+            // Get all users with the "pimpinan" role
+            $leaders = User::role('pimpinan')->with('employee')->get();
+
+            // Log the number of leaders found
+            Log::info('Found ' . $leaders->count() . ' leaders with pimpinan role');
+
+            // For each leader, send email notification
+            foreach ($leaders as $leader) {
+                // Log leader information
+                Log::info('Processing leader: ' . $leader->username . ' (ID: ' . $leader->id . ')');
+
+                // Check if the leader has an employee record with email
+                if ($leader->employee) {
+                    Log::info('Leader has employee record: ' . $leader->employee->fullname . ' (' . $leader->employee->email . ')');
+
+                    if ($leader->employee->email) {
+                        // Send email notification
+                        Log::info('Sending email to: ' . $leader->employee->email);
+                        $this->sendEmailMessage(
+                            $leader->employee->email,
+                            $incomingMail
+                        );
+                    } else {
+                        Log::info('Employee record exists but email is empty for leader: ' . $leader->username);
+                    }
+                } else {
+                    Log::info('Leader does not have an employee record: ' . $leader->username);
+                }
+            }
+        } catch (\Exception $e) {
+            // Log the error but don't stop the main process
+            Log::error('Failed to send email notification: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send email message using Laravel's built-in mail functionality
+     */
+    private function sendEmailMessage($email, $incomingMail)
+    {
+        try {
+            // Log that we're about to send an email
+            Log::info('About to send email to: ' . $email);
+
+            // Use Laravel's mail functionality to send HTML email synchronously
+            \Illuminate\Support\Facades\Mail::send('emails.incoming-mail-notification', ['incomingMail' => $incomingMail], function ($msg) use ($email) {
+                $msg->to($email)
+                    ->subject('🔔 NOTIFIKASI SURAT MASUK 🔔');
+            });
+
+            // Log that the email was sent
+            Log::info('Email sent successfully to: ' . $email);
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Failed to send email to ' . $email . ': ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+
 }

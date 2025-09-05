@@ -16,6 +16,8 @@ class Disposition extends Model
         'deadline',
         'notes',
         'priority',
+        'status',
+        'completed_at',
         'created_by'
     ];
 
@@ -47,5 +49,35 @@ class Disposition extends Model
     public function scopeActive($query)
     {
         return $query->where('deadline', '>=', now());
+    }
+    
+    /**
+     * Check if the disposition is completed
+     */
+    public function isCompleted()
+    {
+        return $this->status === 'completed';
+    }
+    
+    /**
+     * Mark the disposition as completed
+     */
+    public function markAsCompleted()
+    {
+        $this->status = 'completed';
+        $this->completed_at = now();
+        return $this->save();
+    }
+    
+    /**
+     * Get status badge class for styling
+     */
+    public function getStatusBadgeClassAttribute()
+    {
+        return [
+            'pending' => 'bg-yellow-200 text-yellow-800',
+            'in_progress' => 'bg-blue-200 text-blue-800',
+            'completed' => 'bg-green-200 text-green-800',
+        ][$this->status] ?? 'bg-gray-200 text-gray-800';
     }
 }

@@ -41,7 +41,7 @@ Fokus sistem adalah untuk mengelola **surat masuk**, **disposisi**, **surat kelu
    - Download arsip surat
 
 5. **User Management**
-   - Role pengguna (Admin, Pimpinan)
+   - Role pengguna (Admin, Pimpinan, Pegawai)
    - Login & logout
    - Hak akses sesuai role
 

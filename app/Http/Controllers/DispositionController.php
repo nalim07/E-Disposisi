@@ -43,13 +43,24 @@ class DispositionController extends Controller
 
     public function store(Request $request)
     {
+        // First, validate the incoming_mail_id to get the mail date
+        $request->validate([
+            'incoming_mail_id' => 'required|exists:incoming_mails,id',
+        ]);
+
+        // Get the incoming mail to check its date
+        $incomingMail = IncomingMails::findOrFail($request->incoming_mail_id);
+
+        // Now validate all fields including custom validation for deadline
         $request->validate([
             'incoming_mail_id' => 'required|exists:incoming_mails,id',
             'recipient_role' => 'required|exists:roles,name',
             'content' => 'required',
-            'deadline' => 'required|date',
+            'deadline' => 'required|date|after_or_equal:' . $incomingMail->mail_date,
             'priority' => 'required|in:Penting,Biasa,Segera',
             'notes' => 'nullable',
+        ], [
+            'deadline.after_or_equal' => 'Tanggal batas waktu disposisi tidak boleh sebelum tanggal surat.'
         ]);
 
         try {
@@ -75,6 +86,7 @@ class DispositionController extends Controller
                 'content' => $request->content,
                 'deadline' => $request->deadline,
                 'priority' => $request->priority,
+                'status' => 'pending', // Set initial status
                 'notes' => $request->notes,
                 'created_by' => Auth::id(),
             ]);
@@ -117,7 +129,12 @@ class DispositionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try {
+            $disposition = Disposition::with(['incomingMail', 'recipient', 'creator'])->findOrFail($id);
+            return view('disposisi.edit', compact('disposition'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat form edit disposisi: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -125,7 +142,80 @@ class DispositionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $disposition = Disposition::findOrFail($id);
+            
+            // Validate the request
+            $request->validate([
+                'status' => 'required|in:pending,in_progress,completed',
+                'notes' => 'nullable|string',
+            ]);
+            
+            // Update the disposition
+            $disposition->status = $request->status;
+            $disposition->notes = $request->notes;
+            
+            // If marking as completed, set completed_at
+            if ($request->status === 'completed') {
+                $disposition->completed_at = now();
+            }
+            
+            $result = $disposition->save();
+            
+            if ($result) {
+                $message = $request->status === 'completed'
+                    ? 'Tugas berhasil ditandai sebagai selesai.'
+                    : 'Status disposisi berhasil diperbarui.';
+                    
+                return redirect()->route('disposisi.index')->with('success', $message);
+            } else {
+                return back()->with('error', 'Gagal memperbarui disposisi. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui disposisi: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Mark the specified disposition as completed.
+     */
+    public function markAsCompleted(string $id)
+    {
+        try {
+            $disposition = Disposition::findOrFail($id);
+            
+            // Only the recipient or admin can mark as completed
+            if (Auth::id() != $disposition->recipient_id && !Auth::user()->hasRole('admin')) {
+                return back()->with('error', 'Anda tidak memiliki izin untuk menandai tugas ini sebagai selesai.');
+            }
+            
+            $result = $disposition->markAsCompleted();
+            
+            if ($result) {
+                return redirect()->route('disposisi.index')->with('success', 'Tugas berhasil ditandai sebagai selesai.');
+            } else {
+                return back()->with('error', 'Gagal menandai tugas sebagai selesai. Silakan coba lagi.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat menandai tugas sebagai selesai: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Display completed dispositions.
+     */
+    public function completed()
+    {
+        try {
+            $dispositions = Disposition::with(['incomingMail', 'recipient', 'creator'])
+                ->where('status', 'completed')
+                ->orderBy('completed_at', 'desc')
+                ->get();
+                
+            return view('disposisi.completed', compact('dispositions'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memuat data disposisi selesai: ' . $e->getMessage());
+        }
     }
 
     /**

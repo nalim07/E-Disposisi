@@ -46,11 +46,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Membuat role pegawai dan memberikan permission
-        // $pegawai = Role::create(['name' => 'pegawai']);
-        // $pegawai->givePermissionTo([
-        //     'view_beranda',
-        //     'view_surat-masuk',
-        //     'view_disposisi'
-        // ]);
+        $pegawai = Role::create(['name' => 'pegawai']);
+        $pegawai->givePermissionTo([
+            'view_beranda',
+            'view_surat-masuk',
+            'view_disposisi'
+        ]);
     }
 }

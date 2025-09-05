@@ -5,9 +5,9 @@ route-clear:
 		php artisan config:clear
 		php artisan route:cache
 
-cache:
-		php artisan optimize:clear
-		php artisan icon:cache
+# cache:
+# 		php artisan optimize:clear
+# 		php artisan icon:cache
 
 ## ONLY FOR DEVELOPMENT ##
 fresh-seed:
