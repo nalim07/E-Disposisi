@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Position;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PositionSeeder extends Seeder
 {
@@ -21,7 +20,10 @@ class PositionSeeder extends Seeder
         ];
 
         foreach ($positions as $position) {
-            Position::create(['name' => $position]);
+            Position::updateOrCreate(
+                ['name' => $position], // cek berdasarkan kolom name
+                ['name' => $position]  // kalau ada update, kalau belum ada create
+            );
         }
     }
 }

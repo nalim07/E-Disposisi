@@ -5,16 +5,12 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RolePermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Membuat permission untuk semua fitur
+        // daftar permission
         $permissions = [
             'view_beranda',
             'view_surat-masuk',
@@ -24,33 +20,35 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(
+                ['name' => $permission, 'guard_name' => 'web']
+            );
         }
 
-        // Membuat role admin dan memberikan permission
-        $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo([
+        // role admin
+        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $admin->syncPermissions([
             'view_beranda',
             'view_surat-masuk',
             'view_surat-keluar',
             'view_disposisi',
-            'view_arsip'
+            'view_arsip',
         ]);
 
-        // Membuat role pimpinan dan memberikan permission
-        $pimpinan = Role::create(['name' => 'pimpinan']);
-        $pimpinan->givePermissionTo([
+        // role pimpinan
+        $pimpinan = Role::firstOrCreate(['name' => 'pimpinan', 'guard_name' => 'web']);
+        $pimpinan->syncPermissions([
             'view_beranda',
             'view_surat-masuk',
-            'view_disposisi'
+            'view_disposisi',
         ]);
 
-        // Membuat role pegawai dan memberikan permission
-        $pegawai = Role::create(['name' => 'pegawai']);
-        $pegawai->givePermissionTo([
+        // role pegawai
+        $pegawai = Role::firstOrCreate(['name' => 'pegawai', 'guard_name' => 'web']);
+        $pegawai->syncPermissions([
             'view_beranda',
             'view_surat-masuk',
-            'view_disposisi'
+            'view_disposisi',
         ]);
     }
 }
