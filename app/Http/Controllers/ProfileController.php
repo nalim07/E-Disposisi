@@ -18,6 +18,7 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            'employee' => $request->user()->employee,
         ]);
     }
 
@@ -26,13 +27,15 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Update employee information if user has an employee record
+        if ($user->employee) {
+            $user->employee->update([
+                'fullname' => $request->employee_fullname,
+                'email' => $request->employee_email,
+            ]);
         }
-
-        $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
