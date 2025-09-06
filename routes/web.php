@@ -48,15 +48,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/surat-keluar/{outgoingMail}/archive', [OutgoingMailController::class, 'archive'])
         ->name('surat-keluar.archive');
 
-    // Custom disposisi routes
-    Route::get('/disposisi/laporan/selesai', [DispositionController::class, 'completed'])->name('disposisi.completed');
-
     // Resource routes
     Route::resource('disposisi', DispositionController::class)->except(['create']);
 
     // Other custom disposisi routes
     Route::get('/disposisi/incoming/{incomingMail}', [DispositionController::class, 'create'])->name('disposisi.create');
-    Route::patch('/disposisi/{disposition}/mark-as-completed', [DispositionController::class, 'markAsCompleted'])->name('disposisi.mark-as-completed');
 
     Route::resource('arsip', ArchiveController::class)
         ->except(['create', 'update', 'destroy'])

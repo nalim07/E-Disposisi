@@ -20,10 +20,6 @@
 
                 <h1 class="text-3xl font-bold mr-4">Daftar Disposisi</h1>
             </div>
-            <div>
-                <a href="{{ route('disposisi.completed') }}"
-                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Lihat Disposisi Selesai</a>
-            </div>
         </div>
     </div>
 
@@ -46,8 +42,6 @@
                                 Batas Waktu</x-table-header>
                             <x-table-header>
                                 Sifat</x-table-header>
-                            <x-table-header>
-                                Status</x-table-header>
                             <x-table-header class="px-6 py-3">Aksi</x-table-header>
                         </tr>
                     </thead>
@@ -67,25 +61,14 @@
                                 <x-table-cell
                                     class="text-center whitespace-nowrap">{{ $disposition->priority }}</x-table-cell>
                                 <x-table-cell class="text-center whitespace-nowrap">
-                                    <span class="px-2 py-1 rounded {{ $disposition->status_badge_class }}">
-                                        {{ ucfirst(str_replace('_', ' ', $disposition->status)) }}
-                                    </span>
-                                </x-table-cell>
-                                <x-table-cell class="text-center whitespace-nowrap">
                                     <x-action-button href="{{ route('disposisi.show', $disposition->id) }}"
                                         icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
                                         label="Lihat" color="blue" />
-                                    
-                                    @if($disposition->status !== 'completed')
-                                        <x-action-button href="{{ route('disposisi.edit', $disposition->id) }}"
-                                            icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
-                                            label="Edit" color="yellow" />
-                                            
-                                        <x-form-button :action="route('disposisi.mark-as-completed', $disposition->id)"
-                                            icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            label="Selesai" color="green" method="PATCH" />
-                                    @endif
-                                    
+
+                                    <x-action-button href="{{ route('disposisi.edit', $disposition->id) }}"
+                                        icon="M1 12.6476C1 12.6476 5 4.64762 12 4.64762C19 4.64762 23 12.6476 23 12.6476C23 12.6476 19 20.6476 12 20.6476C5 20.6476 1 12.6476 1 12.6476ZM12 15.6476C13.6569 15.6476 15 14.3045 15 12.6476C15 10.9908 13.6569 9.64762 12 9.64762C10.3431 9.64762 9 10.9908 9 12.6476C9 14.3045 10.3431 15.6476 12 15.6476Z"
+                                        label="Edit" color="yellow" />
+
                                     <x-form-button :action="route('disposisi.destroy', $disposition->id)"
                                         icon="M6.5 21.9429C5.95 21.9429 5.47917 21.747 5.0875 21.3554C4.69583 20.9637 4.5 20.4929 4.5 19.9429V6.94286H3.5V4.94286H8.5V3.94286H14.5V4.94286H19.5V6.94286H18.5V19.9429C18.5 20.4929 18.3042 20.9637 17.9125 21.3554C17.5208 21.747 17.05 21.9429 16.5 21.9429H6.5ZM16.5 6.94286H6.5V19.9429H16.5V6.94286ZM8.5 17.9429H10.5V8.94286H8.5V17.9429ZM12.5 17.9429H14.5V8.94286H12.5V17.9429Z"
                                         label="Hapus" color="red" method="DELETE" />
@@ -93,7 +76,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-5 text-center">
+                                <td colspan="7" class="px-6 py-5 text-center">
                                     <div class="flex flex-col items-center justify-center">
                                         <h3 class="text-lg font-medium text-gray-900">Tidak ada data disposisi</h3>
                                     </div>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="title">Edit Disposisi</x-slot>
-    
+
     <div class="flex bg-primary shadow-sm">
         <div class="py-7 px-6 flex items-center justify-between text-white w-full">
             <div class="flex items-center gap-3">
@@ -20,56 +20,40 @@
                 <form action="{{ route('disposisi.update', $disposition->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Surat Masuk</label>
                         <input type="text" value="{{ $disposition->incomingMail->subject }}" disabled
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100">
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Penerima</label>
                         <input type="text" value="{{ $disposition->recipient->username }}" disabled
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100">
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Isi Disposisi</label>
                         <textarea name="content" rows="4" disabled
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100">{{ $disposition->content }}</textarea>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Batas Waktu</label>
                         <input type="date" value="{{ $disposition->deadline }}" disabled
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100">
                     </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="status" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                            <option value="pending" {{ $disposition->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="in_progress" {{ $disposition->status === 'in_progress' ? 'selected' : '' }}>Dalam Proses</option>
-                            <option value="completed" {{ $disposition->status === 'completed' ? 'selected' : '' }}>Selesai</option>
-                        </select>
-                    </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Catatan</label>
                         <textarea name="notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ $disposition->notes }}</textarea>
                     </div>
-                    
+
                     <div class="flex items-center justify-between">
                         <a href="{{ route('disposisi.index') }}"
                             class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Batal</a>
                         <div class="flex space-x-2">
-                            @if($disposition->status !== 'completed')
-                                <x-form-button :action="route('disposisi.mark-as-completed', $disposition->id)"
-                                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                                    method="PATCH">
-                                    Tandai Selesai
-                                </x-form-button>
-                            @endif
                             <button type="submit"
                                 class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Simpan</button>
                         </div>

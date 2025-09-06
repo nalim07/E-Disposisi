@@ -30,17 +30,7 @@
 
                 <div class="col-span-2 font-medium">Sifat</div>
                 <div class="col-span-10">: {{ $disposition->priority }}</div>
-                
-                <div class="col-span-2 font-medium">Status</div>
-                <div class="col-span-10">
-                    : <span class="px-2 py-1 rounded {{ $disposition->status_badge_class }}">
-                        {{ ucfirst(str_replace('_', ' ', $disposition->status)) }}
-                    </span>
-                    @if($disposition->completed_at)
-                        (Selesai pada: {{ $disposition->completed_at->format('d/m/Y H:i') }})
-                    @endif
-                </div>
-                
+
                 @if ($disposition->notes)
                     <div class="col-span-2 font-medium">Catatan</div>
                     <div class="col-span-10">: {{ $disposition->notes }}</div>
