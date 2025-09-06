@@ -44,6 +44,7 @@
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Batas Waktu</label>
                         <input type="date" name="deadline" required
+                            min="{{ $incomingMail->received_date }}"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
 

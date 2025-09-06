@@ -56,11 +56,11 @@ class DispositionController extends Controller
             'incoming_mail_id' => 'required|exists:incoming_mails,id',
             'recipient_role' => 'required|exists:roles,name',
             'content' => 'required',
-            'deadline' => 'required|date|after_or_equal:' . $incomingMail->mail_date,
+            'deadline' => 'required|date|after_or_equal:' . $incomingMail->received_date,
             'priority' => 'required|in:Penting,Biasa,Segera',
             'notes' => 'nullable',
         ], [
-            'deadline.after_or_equal' => 'Tanggal batas waktu disposisi tidak boleh sebelum tanggal surat.'
+            'deadline.after_or_equal' => 'Tanggal batas waktu disposisi tidak boleh sebelum tanggal terima surat.'
         ]);
 
         try {
